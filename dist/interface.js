@@ -106,6 +106,7 @@ var app = new Vue({
   methods: {
     prepareToSaveData: function prepareToSaveData() {},
     saveData: function saveData() {
+      this.settings = Fliplet.Widget.getData(widgetId);
       Fliplet.Widget.save(this.settings).then(function () {
         Fliplet.Widget.complete();
         Fliplet.Studio.emit('reload-widget-instance', widgetId);

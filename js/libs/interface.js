@@ -13,6 +13,8 @@ const app = new Vue({
   methods: {
     prepareToSaveData() {},
     saveData() {
+      this.settings = Fliplet.Widget.getData(widgetId)
+
       Fliplet.Widget.save(this.settings)
         .then(() => {
           Fliplet.Widget.complete()

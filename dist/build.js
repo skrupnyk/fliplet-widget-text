@@ -101,10 +101,10 @@ Fliplet.Widget.instance('text', function (widgetData) {
       return {
         editor: undefined,
         settings: widgetData,
-        MIRROR_ELEMENT_CLASS: 'fl-mirror-element',
-        MIRROR_ROOT_CLASS: 'fl-mirror-root',
         mode: Fliplet.Env.get('mode'),
-        isDev: Fliplet.Env.get('development')
+        isDev: Fliplet.Env.get('development'),
+        MIRROR_ELEMENT_CLASS: 'fl-mirror-element',
+        MIRROR_ROOT_CLASS: 'fl-mirror-root'
       };
     },
     mounted: function mounted() {
@@ -154,7 +154,10 @@ Fliplet.Widget.instance('text', function (widgetData) {
             valid_children: '+body[style],-font[face],div[br,#text],img,+span[div|section|ul|ol|form|header|footer|article|hr|table]',
             setup: function setup(editor) {
               editor.on('init', function () {
-                _this2.editor = editor; // initialize value if it was set prior to initialization
+                _this2.editor = editor; // Remove any existing markers
+
+                _this2.removeMirrorMarkers(); // initialize value if it was set prior to initialization
+
 
                 if (_this2.settings.html) {
                   editor.setContent(_this2.settings.html, {
@@ -165,14 +168,19 @@ Fliplet.Widget.instance('text', function (widgetData) {
                 resolve();
               });
               editor.on('change', function () {
-                _this2.settings.html = editor.getContent();
+                // Remove any existing markers
+                _this2.removeMirrorMarkers();
               });
               editor.on('focus', function () {
                 Fliplet.Studio.emit('show-toolbar', true);
               });
               editor.on('blur', function () {
-                Fliplet.Studio.emit('show-toolbar', false);
-                Fliplet.Widget.save(_this2.settings);
+                Fliplet.Studio.emit('show-toolbar', false); // Remove any existing markers
+
+                _this2.removeMirrorMarkers(); // Save changes
+
+
+                _this2.saveChanges();
               });
               editor.on('nodeChange', function (e) {
                 /******************************************************************/
@@ -180,6 +188,16 @@ Fliplet.Widget.instance('text', function (widgetData) {
                 /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
 
                 /******************************************************************/
+                // Remove any existing markers
+                _this2.removeMirrorMarkers(); // Mark e.element and the last element of e.parents with classes
+
+
+                e.element.classList.add(_this2.MIRROR_ELEMENT_CLASS);
+
+                if (e.parents.length) {
+                  e.parents[e.parents.length - 1].classList.add(_this2.MIRROR_ROOT_CLASS);
+                }
+
                 var fontFamily = window.getComputedStyle(e.element).getPropertyValue('font-family');
                 var fontSize = window.getComputedStyle(e.element).getPropertyValue('font-size'); // Send content to Studio
 
@@ -243,6 +261,14 @@ Fliplet.Widget.instance('text', function (widgetData) {
         // Remove any existing markers
         $('.' + this.MIRROR_ELEMENT_CLASS).removeClass(this.MIRROR_ELEMENT_CLASS);
         $('.' + this.MIRROR_ROOT_CLASS).removeClass(this.MIRROR_ROOT_CLASS);
+      },
+      saveChanges: function saveChanges() {
+        this.settings.html = this.editor.getContent();
+        return Fliplet.Env.get('development') ? Promise.resolve() : Fliplet.API.request({
+          url: "v1/widget-instances/".concat(widgetData.id),
+          method: 'PUT',
+          data: this.settings
+        });
       }
     }
   });
