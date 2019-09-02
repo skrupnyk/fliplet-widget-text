@@ -44,7 +44,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
             plugins: [
               'advlist lists link image charmap hr',
               'searchreplace wordcount insertdatetime table textcolor colorpicker',
-              'noneditable placeholder'
+              'noneditable'
             ],
             toolbar: [
               'formatselect | fontselect fontsizeselect |',

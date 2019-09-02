@@ -138,7 +138,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
             autoresize_bottom_margin: 0,
             autofocus: false,
             branding: false,
-            plugins: ['advlist lists link image charmap hr', 'searchreplace wordcount insertdatetime table textcolor colorpicker', 'noneditable placeholder'],
+            plugins: ['advlist lists link image charmap hr', 'searchreplace wordcount insertdatetime table textcolor colorpicker', 'noneditable'],
             toolbar: ['formatselect | fontselect fontsizeselect |', 'bold italic underline strikethrough | forecolor backcolor |', 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |', 'blockquote subscript superscript | link table insertdatetime charmap hr |', 'removeformat'].join(' '),
             noneditable_noneditable_class: 'fl-widget-instance',
             valid_styles: {
