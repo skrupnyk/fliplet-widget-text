@@ -10,7 +10,6 @@
     "dependencies": [
       "fliplet-core",
       "fliplet-studio-ui",
-      "bootstrap",
       "vue.js"
     ],
     "assets": [
@@ -21,9 +20,6 @@
   "build": {
     "dependencies": [
       "fliplet-core",
-      "bootstrap",
-      "font-awesome",
-      "lodash",
       "tinymce",
       "vue.js"
     ],
