@@ -10,7 +10,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
         mode: Fliplet.Env.get('mode'),
         isDev: Fliplet.Env.get('development'),
         MIRROR_ELEMENT_CLASS: 'fl-mirror-element',
-        MIRROR_ROOT_CLASS: 'fl-mirror-root',
+        MIRROR_ROOT_CLASS: 'fl-mirror-root'
       }
     },
     mounted() {
