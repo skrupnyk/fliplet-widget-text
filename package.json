@@ -1,0 +1,20 @@
+{
+  "name": "fliplet-widget-text",
+  "version": "1.0.0",
+  "description": "A Fliplet component that creates a editable text area",
+  "author": "Hugo Carneiro <hcarneiro@fliplet.com>",
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-transform-modules-amd": "^7.5.0",
+    "@babel/plugin-transform-runtime": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/runtime": "^7.5.5",
+    "babel-loader": "^8.0.6",
+    "gulp": "^4.0.2",
+    "vinyl-named": "^1.1.0",
+    "webpack-stream": "^5.2.1"
+  },
+  "scripts": {
+    "watch": "gulp watch"
+  }
+}

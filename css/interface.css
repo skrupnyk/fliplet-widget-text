@@ -1,0 +1,10 @@
+html,
+body,
+#text-wrapper {
+  height: 100% !important;
+  overflow: hidden;
+}
+
+#text-wrapper {
+  padding: 15px;
+}
