@@ -268,6 +268,10 @@ Fliplet.Widget.instance('text', function (widgetData) {
           url: "v1/widget-instances/".concat(widgetData.id),
           method: 'PUT',
           data: this.settings
+        }).then(function () {
+          Fliplet.Studio.emit('page-preview-send-event', {
+            type: 'savePage'
+          });
         });
       }
     }

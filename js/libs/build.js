@@ -191,11 +191,18 @@ Fliplet.Widget.instance('text', (widgetData) => {
       saveChanges() {
         this.settings.html = this.editor.getContent()
 
-        return Fliplet.Env.get('development') ? Promise.resolve() : Fliplet.API.request({
-          url: `v1/widget-instances/${widgetData.id}`,
-          method: 'PUT',
-          data: this.settings
-        })
+        return Fliplet.Env.get('development') ?
+          Promise.resolve() :
+          Fliplet.API.request({
+            url: `v1/widget-instances/${widgetData.id}`,
+            method: 'PUT',
+            data: this.settings
+          })
+            .then(() => {
+              Fliplet.Studio.emit('page-preview-send-event', {
+                type: 'savePage'
+              })
+            })
       }
     }
   });
