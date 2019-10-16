@@ -10,7 +10,8 @@ Fliplet.Widget.instance('text', (widgetData) => {
         mode: Fliplet.Env.get('mode'),
         isDev: Fliplet.Env.get('development'),
         MIRROR_ELEMENT_CLASS: 'fl-mirror-element',
-        MIRROR_ROOT_CLASS: 'fl-mirror-root'
+        MIRROR_ROOT_CLASS: 'fl-mirror-root',
+        changed: false
       }
     },
     mounted() {
@@ -92,7 +93,15 @@ Fliplet.Widget.instance('text', (widgetData) => {
               })
 
               editor.on('blur', () => {
-                Fliplet.Studio.emit('show-toolbar', false)
+                const _this = this
+
+                setTimeout(function () {
+                  if (!_this.changed) {
+                    Fliplet.Studio.emit('show-toolbar', false)
+                  }
+                  
+                  _this.changed = false;
+                }, 2000);
 
                 // Remove any existing markers
                 this.removeMirrorMarkers()
@@ -101,10 +110,16 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 this.saveChanges()
               })
 
-              editor.on('nodeChange', (e) => {
+              editor.on('ExecCommand', () => {
+                this.changed = true
+              })
+
+              editor.on('NodeChange', (e) => {
                 /******************************************************************/
                 /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
                 /******************************************************************/
+
+                this.changed = true
 
                 // Remove any existing markers
                 this.removeMirrorMarkers()
