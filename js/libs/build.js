@@ -92,17 +92,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 Fliplet.Studio.emit('show-toolbar', true)
               })
 
-              editor.on('blur', () => {
-                const _this = this
-
-                setTimeout(function () {
-                  if (!_this.changed) {
-                    Fliplet.Studio.emit('show-toolbar', false)
-                  }
-                  
-                  _this.changed = false;
-                }, 2000);
-
+              editor.on('blur', (event) => {
                 // Remove any existing markers
                 this.removeMirrorMarkers()
 
@@ -110,16 +100,10 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 this.saveChanges()
               })
 
-              editor.on('ExecCommand', () => {
-                this.changed = true
-              })
-
               editor.on('NodeChange', (e) => {
                 /******************************************************************/
                 /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
                 /******************************************************************/
-
-                this.changed = true
 
                 // Remove any existing markers
                 this.removeMirrorMarkers()
