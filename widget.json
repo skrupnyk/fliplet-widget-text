@@ -21,6 +21,7 @@
     "dependencies": [
       "fliplet-core",
       "vue.js",
+      "lodash",
       "handlebars",
       "tinymce"
     ],

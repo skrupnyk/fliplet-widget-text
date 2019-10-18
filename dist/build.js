@@ -105,7 +105,9 @@ Fliplet.Widget.instance('text', function (widgetData) {
         isDev: Fliplet.Env.get('development'),
         MIRROR_ELEMENT_CLASS: 'fl-mirror-element',
         MIRROR_ROOT_CLASS: 'fl-mirror-root',
-        changed: false
+        WIDGET_INSTANCE_SELECTOR: '[data-fl-widget-instance]',
+        changed: false,
+        debounceSave: _.debounce(this.saveChanges, 500)
       };
     },
     mounted: function mounted() {
@@ -129,19 +131,14 @@ Fliplet.Widget.instance('text', function (widgetData) {
 
         return new Promise(function (resolve, reject) {
           $("[data-text-id=\"".concat(_this2.settings.id, "\"]")).tinymce({
+            inline: true,
+            menubar: false,
             force_br_newlines: false,
             force_p_newlines: true,
-            image_advtab: true,
-            menubar: false,
-            statusbar: false,
-            inline: true,
-            resize: false,
-            autoresize_bottom_margin: 0,
-            autofocus: false,
-            branding: false,
+            forced_root_block: 'p',
+            object_resizing: false,
+            verify_html: false,
             plugins: ['advlist lists link image charmap hr', 'searchreplace wordcount insertdatetime table textcolor colorpicker', 'noneditable'],
-            toolbar: ['formatselect | fontselect fontsizeselect |', 'bold italic underline strikethrough | forecolor backcolor |', 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |', 'blockquote subscript superscript | link table insertdatetime charmap hr |', 'removeformat'].join(' '),
-            noneditable_noneditable_class: 'fl-widget-instance',
             valid_styles: {
               '*': 'font-family,font-size,font-weight,font-style,text-decoration,text-align,padding,padding-left,padding-right,padding-top,padding-bottom,padding,margin-left,margin-right,margin-top,margin-bottom,margin,display,float,color,background,background-color,background-image,list-style-type,line-height,letter-spacing,width,height,min-width,max-width,min-height,max-height,border,border-top,border-bottom,border-left,border-right,position,opacity,top,left,right,bottom,overflow,z-index',
               img: 'text-align,margin-left,margin-right,display,float,width,height,background,background-color',
@@ -153,6 +150,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
               tfoot: 'border-color,width,height,font-size,font-weight,font-style,text-decoration,text-align,color,background,background-color,min-width,max-width,min-height,max-height,border,border-top,border-bottom,border-left,border-right,padding,padding-left,padding-right,padding-top,padding-bottom,padding,margin-left,margin-right,margin-top,margin-bottom,margin'
             },
             valid_children: '+body[style],-font[face],div[br,#text],img,+span[div|section|ul|ol|form|header|footer|article|hr|table]',
+            toolbar: ['formatselect | fontselect fontsizeselect |', 'bold italic underline strikethrough | forecolor backcolor |', 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |', 'blockquote subscript superscript | link table insertdatetime charmap hr |', 'removeformat'].join(' '),
             setup: function setup(editor) {
               editor.on('init', function () {
                 _this2.editor = editor; // Remove any existing markers
@@ -170,7 +168,10 @@ Fliplet.Widget.instance('text', function (widgetData) {
               });
               editor.on('change', function () {
                 // Remove any existing markers
-                _this2.removeMirrorMarkers();
+                _this2.removeMirrorMarkers(); // Save changes
+
+
+                _this2.debounceSave();
               });
               editor.on('focus', function () {
                 Fliplet.Studio.emit('show-toolbar', true);
@@ -180,7 +181,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
                 _this2.removeMirrorMarkers(); // Save changes
 
 
-                _this2.saveChanges();
+                _this2.debounceSave();
               });
               editor.on('NodeChange', function (e) {
                 /******************************************************************/
@@ -207,7 +208,9 @@ Fliplet.Widget.instance('text', function (widgetData) {
                     html: e.parents.length ? e.parents[e.parents.length - 1].outerHTML : e.element.outerHTML,
                     styles: ['.' + _this2.MIRROR_ELEMENT_CLASS + ' {', '\tfont-family: ' + fontFamily + ';', '\tfont-size: ' + fontSize + ';', '}'].join('\n')
                   }
-                });
+                }); // Save changes
+
+                _this2.debounceSave();
               });
             }
           });
@@ -265,10 +268,20 @@ Fliplet.Widget.instance('text', function (widgetData) {
         $('.' + this.MIRROR_ELEMENT_CLASS).removeClass(this.MIRROR_ELEMENT_CLASS);
         $('.' + this.MIRROR_ROOT_CLASS).removeClass(this.MIRROR_ROOT_CLASS);
       },
+      replaceWidgetInstances: function replaceWidgetInstances($html) {
+        $html.find(this.WIDGET_INSTANCE_SELECTOR).replaceWith(function () {
+          var widgetInstanceId = $(this).data('id');
+          return '{{{widget ' + widgetInstanceId + '}}}';
+        });
+        return $html;
+      },
       saveChanges: function saveChanges() {
         var data = {
           html: this.editor.getContent()
         };
+        var $html = $('<div>' + data.html + '</div>').clone();
+        $replacedHTML = this.replaceWidgetInstances($html);
+        data.html = $replacedHTML.html();
         return Fliplet.Env.get('development') ? Promise.resolve() : Fliplet.API.request({
           url: "v1/widget-instances/".concat(this.settings.id),
           method: 'PUT',
