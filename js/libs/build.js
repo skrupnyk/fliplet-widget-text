@@ -1,5 +1,5 @@
 Fliplet.Widget.instance('text', (widgetData) => {
-  var selector = '[data-text-id="' + widgetData.id + '"]';
+  const selector = '[data-text-id="' + widgetData.id + '"]';
 
   new Vue({
     el: $(selector)[0],
@@ -10,7 +10,10 @@ Fliplet.Widget.instance('text', (widgetData) => {
         mode: Fliplet.Env.get('mode'),
         isDev: Fliplet.Env.get('development'),
         MIRROR_ELEMENT_CLASS: 'fl-mirror-element',
-        MIRROR_ROOT_CLASS: 'fl-mirror-root'
+        MIRROR_ROOT_CLASS: 'fl-mirror-root',
+        WIDGET_INSTANCE_SELECTOR: '[data-fl-widget-instance]',
+        changed: false,
+        debounceSave: _.debounce(this.saveChanges, 500)
       }
     },
     mounted() {
@@ -30,30 +33,19 @@ Fliplet.Widget.instance('text', (widgetData) => {
     methods: {
       initializeEditor() {
         return new Promise((resolve, reject) => {
-          $(`[data-text-id="${widgetData.id}"]`).tinymce({
+          $(`[data-text-id="${this.settings.id}"]`).tinymce({
+            inline: true,
+            menubar: false,
             force_br_newlines: false,
             force_p_newlines: true,
-            image_advtab: true,
-            menubar: false,
-            statusbar: false,
-            inline: true,
-            resize: false,
-            autoresize_bottom_margin: 0,
-            autofocus: false,
-            branding: false,
+            forced_root_block: 'p',
+            object_resizing: false,
+            verify_html: false,
             plugins: [
               'advlist lists link image charmap hr',
               'searchreplace wordcount insertdatetime table textcolor colorpicker',
               'noneditable'
             ],
-            toolbar: [
-              'formatselect | fontselect fontsizeselect |',
-              'bold italic underline strikethrough | forecolor backcolor |',
-              'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |',
-              'blockquote subscript superscript | link table insertdatetime charmap hr |',
-              'removeformat'
-            ].join(' '),
-            noneditable_noneditable_class: 'fl-widget-instance',
             valid_styles: {
               '*': 'font-family,font-size,font-weight,font-style,text-decoration,text-align,padding,padding-left,padding-right,padding-top,padding-bottom,padding,margin-left,margin-right,margin-top,margin-bottom,margin,display,float,color,background,background-color,background-image,list-style-type,line-height,letter-spacing,width,height,min-width,max-width,min-height,max-height,border,border-top,border-bottom,border-left,border-right,position,opacity,top,left,right,bottom,overflow,z-index',
               img: 'text-align,margin-left,margin-right,display,float,width,height,background,background-color',
@@ -64,7 +56,14 @@ Fliplet.Widget.instance('text', (widgetData) => {
               thead: 'border-color,width,height,font-size,font-weight,font-style,text-decoration,text-align,color,background,background-color,min-width,max-width,min-height,max-height,border,border-top,border-bottom,border-left,border-right,padding,padding-left,padding-right,padding-top,padding-bottom,padding,margin-left,margin-right,margin-top,margin-bottom,margin',
               tfoot: 'border-color,width,height,font-size,font-weight,font-style,text-decoration,text-align,color,background,background-color,min-width,max-width,min-height,max-height,border,border-top,border-bottom,border-left,border-right,padding,padding-left,padding-right,padding-top,padding-bottom,padding,margin-left,margin-right,margin-top,margin-bottom,margin'
             },
-            valid_children: '+body[style],-font[face],div[br,#text],img,+span[div|section|ul|ol|form|header|footer|article|hr|table]',
+            valid_children : '+body[style],-font[face],div[br,#text],img,+span[div|section|ul|ol|form|header|footer|article|hr|table]',
+            toolbar: [
+              'formatselect | fontselect fontsizeselect |',
+              'bold italic underline strikethrough | forecolor backcolor |',
+              'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |',
+              'blockquote subscript superscript | link table insertdatetime charmap hr |',
+              'removeformat'
+            ].join(' '),
             setup: (editor) => {
               editor.on('init', () => {
                 this.editor = editor
@@ -85,6 +84,9 @@ Fliplet.Widget.instance('text', (widgetData) => {
               editor.on('change', () => {
                 // Remove any existing markers
                 this.removeMirrorMarkers()
+
+                // Save changes
+                this.debounceSave()
               })
 
               editor.on('focus', () => {
@@ -92,16 +94,14 @@ Fliplet.Widget.instance('text', (widgetData) => {
               })
 
               editor.on('blur', () => {
-                Fliplet.Studio.emit('show-toolbar', false)
-
                 // Remove any existing markers
                 this.removeMirrorMarkers()
 
                 // Save changes
-                this.saveChanges()
+                this.debounceSave()
               })
 
-              editor.on('nodeChange', (e) => {
+              editor.on('NodeChange', (e) => {
                 /******************************************************************/
                 /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
                 /******************************************************************/
@@ -133,6 +133,9 @@ Fliplet.Widget.instance('text', (widgetData) => {
                     ].join('\n')
                   }
                 })
+
+                // Save changes
+                this.debounceSave()
               })
             }
           })
@@ -176,8 +179,10 @@ Fliplet.Widget.instance('text', (widgetData) => {
                   }, null, true
                 )
                 editor.nodeChanged()
-              });
+              })
               break
+            case 'widgetCancel':
+              Fliplet.Studio.emit('show-toolbar', false)
             default:
               break
           }
@@ -188,15 +193,31 @@ Fliplet.Widget.instance('text', (widgetData) => {
         $('.' + this.MIRROR_ELEMENT_CLASS).removeClass(this.MIRROR_ELEMENT_CLASS)
         $('.' + this.MIRROR_ROOT_CLASS).removeClass(this.MIRROR_ROOT_CLASS)
       },
+      replaceWidgetInstances($html) {
+        $html.find(this.WIDGET_INSTANCE_SELECTOR).replaceWith(function () {
+          const widgetInstanceId = $(this).data('id');
+    
+          return '{{{widget ' + widgetInstanceId + '}}}';
+        });
+    
+        return $html;
+      },
       saveChanges() {
-        this.settings.html = this.editor.getContent()
+        const data = {
+          html: this.editor.getContent()
+        }
+
+        const $html = $('<div>' + data.html + '</div>').clone()
+        $replacedHTML = this.replaceWidgetInstances($html)
+
+        data.html = $replacedHTML.html()
 
         return Fliplet.Env.get('development') ?
           Promise.resolve() :
           Fliplet.API.request({
-            url: `v1/widget-instances/${widgetData.id}`,
+            url: `v1/widget-instances/${this.settings.id}`,
             method: 'PUT',
-            data: this.settings
+            data
           })
             .then(() => {
               Fliplet.Studio.emit('page-preview-send-event', {

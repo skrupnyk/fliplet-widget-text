@@ -1,5 +1,5 @@
 <div data-text-id="{{ id }}" data-text-uuid="{{ uuid }}">
-  <template v-if="settings.html">
+  <template v-if="settings && settings.html">
     {{{ html }}}
   </template>
   <template v-else>

@@ -13,20 +13,24 @@
       "vue.js"
     ],
     "assets": [
-      "dist/interface.js",
-      "css/interface.css"
+      "css/interface.css",
+      "dist/interface.js"
     ]
   },
   "build": {
     "dependencies": [
       "fliplet-core",
-      "tinymce",
-      "vue.js"
+      "vue.js",
+      "lodash",
+      "handlebars",
+      "tinymce"
     ],
     "assets": [
-      "dist/build.js",
-      "css/build.css"
+      "css/build.css",
+      "dist/build.js"
     ]
   },
-  "references": []
+  "references": [
+    "html:richContent"
+  ]
 }
