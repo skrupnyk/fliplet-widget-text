@@ -1,5 +1,5 @@
 Fliplet.Widget.instance('text', (widgetData) => {
-  var selector = '[data-text-id="' + widgetData.id + '"]';
+  const selector = '[data-text-id="' + widgetData.id + '"]';
 
   new Vue({
     el: $(selector)[0],
@@ -31,7 +31,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
     methods: {
       initializeEditor() {
         return new Promise((resolve, reject) => {
-          $(`[data-text-id="${widgetData.id}"]`).tinymce({
+          $(`[data-text-id="${this.settings.id}"]`).tinymce({
             force_br_newlines: false,
             force_p_newlines: true,
             image_advtab: true,
@@ -92,7 +92,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 Fliplet.Studio.emit('show-toolbar', true)
               })
 
-              editor.on('blur', (event) => {
+              editor.on('blur', () => {
                 // Remove any existing markers
                 this.removeMirrorMarkers()
 
@@ -175,8 +175,10 @@ Fliplet.Widget.instance('text', (widgetData) => {
                   }, null, true
                 )
                 editor.nodeChanged()
-              });
+              })
               break
+            case 'widgetCancel':
+              Fliplet.Studio.emit('show-toolbar', false)
             default:
               break
           }
@@ -188,14 +190,16 @@ Fliplet.Widget.instance('text', (widgetData) => {
         $('.' + this.MIRROR_ROOT_CLASS).removeClass(this.MIRROR_ROOT_CLASS)
       },
       saveChanges() {
-        this.settings.html = this.editor.getContent()
+        const data = {
+          html: this.editor.getContent()
+        }
 
         return Fliplet.Env.get('development') ?
           Promise.resolve() :
           Fliplet.API.request({
-            url: `v1/widget-instances/${widgetData.id}`,
+            url: `v1/widget-instances/${this.settings.id}`,
             method: 'PUT',
-            data: this.settings
+            data
           })
             .then(() => {
               Fliplet.Studio.emit('page-preview-send-event', {

@@ -128,7 +128,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
         var _this2 = this;
 
         return new Promise(function (resolve, reject) {
-          $("[data-text-id=\"".concat(widgetData.id, "\"]")).tinymce({
+          $("[data-text-id=\"".concat(_this2.settings.id, "\"]")).tinymce({
             force_br_newlines: false,
             force_p_newlines: true,
             image_advtab: true,
@@ -175,7 +175,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
               editor.on('focus', function () {
                 Fliplet.Studio.emit('show-toolbar', true);
               });
-              editor.on('blur', function (event) {
+              editor.on('blur', function () {
                 // Remove any existing markers
                 _this2.removeMirrorMarkers(); // Save changes
 
@@ -252,6 +252,9 @@ Fliplet.Widget.instance('text', function (widgetData) {
               });
               break;
 
+            case 'widgetCancel':
+              Fliplet.Studio.emit('show-toolbar', false);
+
             default:
               break;
           }
@@ -263,11 +266,13 @@ Fliplet.Widget.instance('text', function (widgetData) {
         $('.' + this.MIRROR_ROOT_CLASS).removeClass(this.MIRROR_ROOT_CLASS);
       },
       saveChanges: function saveChanges() {
-        this.settings.html = this.editor.getContent();
+        var data = {
+          html: this.editor.getContent()
+        };
         return Fliplet.Env.get('development') ? Promise.resolve() : Fliplet.API.request({
-          url: "v1/widget-instances/".concat(widgetData.id),
+          url: "v1/widget-instances/".concat(this.settings.id),
           method: 'PUT',
-          data: this.settings
+          data: data
         }).then(function () {
           Fliplet.Studio.emit('page-preview-send-event', {
             type: 'savePage'
@@ -287,7 +292,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\hugoc\Documents\GitHub\Fliplet\fliplet-widget-text\js\libs\build.js */"./js/libs/build.js");
+module.exports = __webpack_require__(/*! /Users/hcarneiro/Repos/Fliplet/fliplet-widget-text/js/libs/build.js */"./js/libs/build.js");
 
 
 /***/ })

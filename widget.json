@@ -20,13 +20,16 @@
   "build": {
     "dependencies": [
       "fliplet-core",
-      "tinymce",
-      "vue.js"
+      "handlebars",
+      "vue.js",
+      "tinymce"
     ],
     "assets": [
       "dist/build.js",
       "css/build.css"
     ]
   },
-  "references": []
+  "references": [
+    "html:richContent"
+  ]
 }
