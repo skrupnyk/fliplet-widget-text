@@ -22,13 +22,6 @@ Fliplet.Widget.instance('text', (widgetData) => {
       }
 
       this.initializeEditor()
-        .then(() => {
-          Fliplet.Studio.emit('tinymce', {
-            message: 'tinymceInitialised'
-          })
-
-          this.attachEvenHandlers()
-        })
     },
     methods: {
       initializeEditor() {
@@ -82,6 +75,8 @@ Fliplet.Widget.instance('text', (widgetData) => {
               })
 
               editor.on('change', () => {
+                Fliplet.Studio.emit('get-selected-widget', this.settings.id)
+
                 // Remove any existing markers
                 this.removeMirrorMarkers()
 
@@ -91,6 +86,10 @@ Fliplet.Widget.instance('text', (widgetData) => {
 
               editor.on('focus', () => {
                 Fliplet.Studio.emit('show-toolbar', true)
+                Fliplet.Studio.emit('get-selected-widget', {
+                  value: this.settings.id,
+                  active: true
+                })
               })
 
               editor.on('blur', () => {
@@ -101,10 +100,12 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 this.debounceSave()
               })
 
-              editor.on('NodeChange', (e) => {
+              editor.on('nodeChange', (e) => {
                 /******************************************************************/
                 /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
                 /******************************************************************/
+
+                Fliplet.Studio.emit('get-selected-widget', this.settings.id)
 
                 // Remove any existing markers
                 this.removeMirrorMarkers()
@@ -139,53 +140,6 @@ Fliplet.Widget.instance('text', (widgetData) => {
               })
             }
           })
-        })
-      },
-      attachEvenHandlers() {
-        Fliplet.Studio.onEvent((event) => {
-          const eventDetail = event.detail
-          let editor = null
-
-          switch (eventDetail.type) {
-            case 'tinymce.execCommand':
-              if (!eventDetail.payload) {
-                break
-              }
-
-              const cmd = eventDetail.payload.cmd
-              const ui = eventDetail.payload.ui
-              const value = eventDetail.payload.value
-              tinymce.activeEditor.execCommand(cmd, ui, value)
-              break
-            case 'tinymce.applyFormat':
-              editor = tinymce.activeEditor
-              editor.undoManager.transact(() => {
-                editor.focus()
-                editor.formatter.apply(
-                  eventDetail.payload.format, {
-                    value: eventDetail.payload.value
-                  }
-                )
-                editor.nodeChanged()
-              });
-              break
-            case 'tinymce.removeFormat':
-              editor = tinymce.activeEditor
-              editor.undoManager.transact(() => {
-                editor.focus()
-                editor.formatter.remove(
-                  eventDetail.payload.format, {
-                    value: null
-                  }, null, true
-                )
-                editor.nodeChanged()
-              })
-              break
-            case 'widgetCancel':
-              Fliplet.Studio.emit('show-toolbar', false)
-            default:
-              break
-          }
         })
       },
       removeMirrorMarkers() {

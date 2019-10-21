@@ -1,3 +1,8 @@
 .mode-interact .mce-tinymce-inline {
   display: none;
 }
+
+.mode-interact .mce-edit-highlight,
+.mode-interact .mce-edit-focus {
+  outline: none;
+}

@@ -111,26 +111,18 @@ Fliplet.Widget.instance('text', function (widgetData) {
       };
     },
     mounted: function mounted() {
-      var _this = this;
-
       if (this.mode !== 'interact' && !this.isDev) {
         return;
       }
 
-      this.initializeEditor().then(function () {
-        Fliplet.Studio.emit('tinymce', {
-          message: 'tinymceInitialised'
-        });
-
-        _this.attachEvenHandlers();
-      });
+      this.initializeEditor();
     },
     methods: {
       initializeEditor: function initializeEditor() {
-        var _this2 = this;
+        var _this = this;
 
         return new Promise(function (resolve, reject) {
-          $("[data-text-id=\"".concat(_this2.settings.id, "\"]")).tinymce({
+          $("[data-text-id=\"".concat(_this.settings.id, "\"]")).tinymce({
             inline: true,
             menubar: false,
             force_br_newlines: false,
@@ -153,13 +145,13 @@ Fliplet.Widget.instance('text', function (widgetData) {
             toolbar: ['formatselect | fontselect fontsizeselect |', 'bold italic underline strikethrough | forecolor backcolor |', 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |', 'blockquote subscript superscript | link table insertdatetime charmap hr |', 'removeformat'].join(' '),
             setup: function setup(editor) {
               editor.on('init', function () {
-                _this2.editor = editor; // Remove any existing markers
+                _this.editor = editor; // Remove any existing markers
 
-                _this2.removeMirrorMarkers(); // initialize value if it was set prior to initialization
+                _this.removeMirrorMarkers(); // initialize value if it was set prior to initialization
 
 
-                if (_this2.settings.html) {
-                  editor.setContent(_this2.settings.html, {
+                if (_this.settings.html) {
+                  editor.setContent(_this.settings.html, {
                     format: 'raw'
                   });
                 }
@@ -167,36 +159,42 @@ Fliplet.Widget.instance('text', function (widgetData) {
                 resolve();
               });
               editor.on('change', function () {
-                // Remove any existing markers
-                _this2.removeMirrorMarkers(); // Save changes
+                Fliplet.Studio.emit('get-selected-widget', _this.settings.id); // Remove any existing markers
+
+                _this.removeMirrorMarkers(); // Save changes
 
 
-                _this2.debounceSave();
+                _this.debounceSave();
               });
               editor.on('focus', function () {
                 Fliplet.Studio.emit('show-toolbar', true);
+                Fliplet.Studio.emit('get-selected-widget', {
+                  value: _this.settings.id,
+                  active: true
+                });
               });
               editor.on('blur', function () {
                 // Remove any existing markers
-                _this2.removeMirrorMarkers(); // Save changes
+                _this.removeMirrorMarkers(); // Save changes
 
 
-                _this2.debounceSave();
+                _this.debounceSave();
               });
-              editor.on('NodeChange', function (e) {
+              editor.on('nodeChange', function (e) {
                 /******************************************************************/
 
                 /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
 
                 /******************************************************************/
-                // Remove any existing markers
-                _this2.removeMirrorMarkers(); // Mark e.element and the last element of e.parents with classes
+                Fliplet.Studio.emit('get-selected-widget', _this.settings.id); // Remove any existing markers
+
+                _this.removeMirrorMarkers(); // Mark e.element and the last element of e.parents with classes
 
 
-                e.element.classList.add(_this2.MIRROR_ELEMENT_CLASS);
+                e.element.classList.add(_this.MIRROR_ELEMENT_CLASS);
 
                 if (e.parents.length) {
-                  e.parents[e.parents.length - 1].classList.add(_this2.MIRROR_ROOT_CLASS);
+                  e.parents[e.parents.length - 1].classList.add(_this.MIRROR_ROOT_CLASS);
                 }
 
                 var fontFamily = window.getComputedStyle(e.element).getPropertyValue('font-family');
@@ -206,61 +204,14 @@ Fliplet.Widget.instance('text', function (widgetData) {
                   message: 'tinymceNodeChange',
                   payload: {
                     html: e.parents.length ? e.parents[e.parents.length - 1].outerHTML : e.element.outerHTML,
-                    styles: ['.' + _this2.MIRROR_ELEMENT_CLASS + ' {', '\tfont-family: ' + fontFamily + ';', '\tfont-size: ' + fontSize + ';', '}'].join('\n')
+                    styles: ['.' + _this.MIRROR_ELEMENT_CLASS + ' {', '\tfont-family: ' + fontFamily + ';', '\tfont-size: ' + fontSize + ';', '}'].join('\n')
                   }
                 }); // Save changes
 
-                _this2.debounceSave();
+                _this.debounceSave();
               });
             }
           });
-        });
-      },
-      attachEvenHandlers: function attachEvenHandlers() {
-        Fliplet.Studio.onEvent(function (event) {
-          var eventDetail = event.detail;
-          var editor = null;
-
-          switch (eventDetail.type) {
-            case 'tinymce.execCommand':
-              if (!eventDetail.payload) {
-                break;
-              }
-
-              var cmd = eventDetail.payload.cmd;
-              var ui = eventDetail.payload.ui;
-              var value = eventDetail.payload.value;
-              tinymce.activeEditor.execCommand(cmd, ui, value);
-              break;
-
-            case 'tinymce.applyFormat':
-              editor = tinymce.activeEditor;
-              editor.undoManager.transact(function () {
-                editor.focus();
-                editor.formatter.apply(eventDetail.payload.format, {
-                  value: eventDetail.payload.value
-                });
-                editor.nodeChanged();
-              });
-              break;
-
-            case 'tinymce.removeFormat':
-              editor = tinymce.activeEditor;
-              editor.undoManager.transact(function () {
-                editor.focus();
-                editor.formatter.remove(eventDetail.payload.format, {
-                  value: null
-                }, null, true);
-                editor.nodeChanged();
-              });
-              break;
-
-            case 'widgetCancel':
-              Fliplet.Studio.emit('show-toolbar', false);
-
-            default:
-              break;
-          }
         });
       },
       removeMirrorMarkers: function removeMirrorMarkers() {
