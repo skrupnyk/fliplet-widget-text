@@ -13,7 +13,8 @@ Fliplet.Widget.instance('text', (widgetData) => {
         MIRROR_ROOT_CLASS: 'fl-mirror-root',
         WIDGET_INSTANCE_SELECTOR: '[data-fl-widget-instance]',
         changed: false,
-        debounceSave: _.debounce(this.saveChanges, 500)
+        debounceSave: _.debounce(this.saveChanges, 500),
+        isInitialized: false
       }
     },
     mounted() {
@@ -22,6 +23,9 @@ Fliplet.Widget.instance('text', (widgetData) => {
       }
 
       this.initializeEditor()
+        .then(() => {
+          this.isInitialized = true
+        })
     },
     methods: {
       initializeEditor() {
@@ -105,7 +109,9 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
                 /******************************************************************/
 
-                Fliplet.Studio.emit('get-selected-widget', this.settings.id)
+                if (this.isInitialized) {
+                  Fliplet.Studio.emit('get-selected-widget', this.settings.id)
+                }
 
                 // Remove any existing markers
                 this.removeMirrorMarkers()

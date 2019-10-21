@@ -107,22 +107,27 @@ Fliplet.Widget.instance('text', function (widgetData) {
         MIRROR_ROOT_CLASS: 'fl-mirror-root',
         WIDGET_INSTANCE_SELECTOR: '[data-fl-widget-instance]',
         changed: false,
-        debounceSave: _.debounce(this.saveChanges, 500)
+        debounceSave: _.debounce(this.saveChanges, 500),
+        isInitialized: false
       };
     },
     mounted: function mounted() {
+      var _this = this;
+
       if (this.mode !== 'interact' && !this.isDev) {
         return;
       }
 
-      this.initializeEditor();
+      this.initializeEditor().then(function () {
+        _this.isInitialized = true;
+      });
     },
     methods: {
       initializeEditor: function initializeEditor() {
-        var _this = this;
+        var _this2 = this;
 
         return new Promise(function (resolve, reject) {
-          $("[data-text-id=\"".concat(_this.settings.id, "\"]")).tinymce({
+          $("[data-text-id=\"".concat(_this2.settings.id, "\"]")).tinymce({
             inline: true,
             menubar: false,
             force_br_newlines: false,
@@ -145,13 +150,13 @@ Fliplet.Widget.instance('text', function (widgetData) {
             toolbar: ['formatselect | fontselect fontsizeselect |', 'bold italic underline strikethrough | forecolor backcolor |', 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |', 'blockquote subscript superscript | link table insertdatetime charmap hr |', 'removeformat'].join(' '),
             setup: function setup(editor) {
               editor.on('init', function () {
-                _this.editor = editor; // Remove any existing markers
+                _this2.editor = editor; // Remove any existing markers
 
-                _this.removeMirrorMarkers(); // initialize value if it was set prior to initialization
+                _this2.removeMirrorMarkers(); // initialize value if it was set prior to initialization
 
 
-                if (_this.settings.html) {
-                  editor.setContent(_this.settings.html, {
+                if (_this2.settings.html) {
+                  editor.setContent(_this2.settings.html, {
                     format: 'raw'
                   });
                 }
@@ -159,26 +164,26 @@ Fliplet.Widget.instance('text', function (widgetData) {
                 resolve();
               });
               editor.on('change', function () {
-                Fliplet.Studio.emit('get-selected-widget', _this.settings.id); // Remove any existing markers
+                Fliplet.Studio.emit('get-selected-widget', _this2.settings.id); // Remove any existing markers
 
-                _this.removeMirrorMarkers(); // Save changes
+                _this2.removeMirrorMarkers(); // Save changes
 
 
-                _this.debounceSave();
+                _this2.debounceSave();
               });
               editor.on('focus', function () {
                 Fliplet.Studio.emit('show-toolbar', true);
                 Fliplet.Studio.emit('get-selected-widget', {
-                  value: _this.settings.id,
+                  value: _this2.settings.id,
                   active: true
                 });
               });
               editor.on('blur', function () {
                 // Remove any existing markers
-                _this.removeMirrorMarkers(); // Save changes
+                _this2.removeMirrorMarkers(); // Save changes
 
 
-                _this.debounceSave();
+                _this2.debounceSave();
               });
               editor.on('nodeChange', function (e) {
                 /******************************************************************/
@@ -186,15 +191,18 @@ Fliplet.Widget.instance('text', function (widgetData) {
                 /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
 
                 /******************************************************************/
-                Fliplet.Studio.emit('get-selected-widget', _this.settings.id); // Remove any existing markers
+                if (_this2.isInitialized) {
+                  Fliplet.Studio.emit('get-selected-widget', _this2.settings.id);
+                } // Remove any existing markers
 
-                _this.removeMirrorMarkers(); // Mark e.element and the last element of e.parents with classes
+
+                _this2.removeMirrorMarkers(); // Mark e.element and the last element of e.parents with classes
 
 
-                e.element.classList.add(_this.MIRROR_ELEMENT_CLASS);
+                e.element.classList.add(_this2.MIRROR_ELEMENT_CLASS);
 
                 if (e.parents.length) {
-                  e.parents[e.parents.length - 1].classList.add(_this.MIRROR_ROOT_CLASS);
+                  e.parents[e.parents.length - 1].classList.add(_this2.MIRROR_ROOT_CLASS);
                 }
 
                 var fontFamily = window.getComputedStyle(e.element).getPropertyValue('font-family');
@@ -204,11 +212,11 @@ Fliplet.Widget.instance('text', function (widgetData) {
                   message: 'tinymceNodeChange',
                   payload: {
                     html: e.parents.length ? e.parents[e.parents.length - 1].outerHTML : e.element.outerHTML,
-                    styles: ['.' + _this.MIRROR_ELEMENT_CLASS + ' {', '\tfont-family: ' + fontFamily + ';', '\tfont-size: ' + fontSize + ';', '}'].join('\n')
+                    styles: ['.' + _this2.MIRROR_ELEMENT_CLASS + ' {', '\tfont-family: ' + fontFamily + ';', '\tfont-size: ' + fontSize + ';', '}'].join('\n')
                   }
                 }); // Save changes
 
-                _this.debounceSave();
+                _this2.debounceSave();
               });
             }
           });
