@@ -172,11 +172,11 @@ Fliplet.Widget.instance('text', function (widgetData) {
                 _this2.debounceSave();
               });
               editor.on('focus', function () {
-                Fliplet.Studio.emit('show-toolbar', true);
                 Fliplet.Studio.emit('get-selected-widget', {
                   value: _this2.settings.id,
                   active: true
                 });
+                Fliplet.Studio.emit('show-toolbar', true);
               });
               editor.on('blur', function () {
                 // Remove any existing markers

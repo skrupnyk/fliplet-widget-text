@@ -89,11 +89,11 @@ Fliplet.Widget.instance('text', (widgetData) => {
               })
 
               editor.on('focus', () => {
-                Fliplet.Studio.emit('show-toolbar', true)
                 Fliplet.Studio.emit('get-selected-widget', {
                   value: this.settings.id,
                   active: true
                 })
+                Fliplet.Studio.emit('show-toolbar', true)
               })
 
               editor.on('blur', () => {
