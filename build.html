@@ -1,7 +1,5 @@
 <div data-text-id="{{ id }}" data-text-uuid="{{ uuid }}">
-  <template v-if="settings && settings.html">
-    {{{ html }}}
-  </template>
+  <span v-if="settings && settings.html" v-html="settings.html"></span>
   <template v-else>
     <p v-if="mode === 'interact' || isDev">Click here to start typing...</p>
     <p v-else>&nbsp;</p>

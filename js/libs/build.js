@@ -29,6 +29,13 @@ Fliplet.Widget.instance('text', (widgetData) => {
     },
     methods: {
       initializeEditor() {
+        const $element = $(`[data-text-id="${this.settings.id}"]`)
+        this.editor = tinymce.get($element.attr('id'))
+
+        if (this.editor) {
+          return Promise.resolve() 
+        }
+
         return new Promise((resolve, reject) => {
           $(`[data-text-id="${this.settings.id}"]`).tinymce({
             inline: true,

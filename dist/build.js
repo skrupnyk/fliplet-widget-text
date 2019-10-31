@@ -126,6 +126,13 @@ Fliplet.Widget.instance('text', function (widgetData) {
       initializeEditor: function initializeEditor() {
         var _this2 = this;
 
+        var $element = $("[data-text-id=\"".concat(this.settings.id, "\"]"));
+        this.editor = tinymce.get($element.attr('id'));
+
+        if (this.editor) {
+          return Promise.resolve();
+        }
+
         return new Promise(function (resolve, reject) {
           $("[data-text-id=\"".concat(_this2.settings.id, "\"]")).tinymce({
             inline: true,
