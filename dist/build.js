@@ -120,6 +120,8 @@ Fliplet.Widget.instance('text', function (widgetData) {
 
       this.initializeEditor().then(function () {
         _this.isInitialized = true;
+
+        _this.eventHandlers();
       });
     },
     methods: {
@@ -229,6 +231,49 @@ Fliplet.Widget.instance('text', function (widgetData) {
           });
         });
       },
+      eventHandlers: function eventHandlers() {
+        Fliplet.Studio.onEvent(function (event) {
+          var eventDetail = event.detail;
+
+          switch (eventDetail.type) {
+            case 'tinymce.execCommand':
+              if (!eventDetail.payload) {
+                break;
+              }
+
+              var cmd = eventDetail.payload.cmd;
+              var ui = eventDetail.payload.ui;
+              var value = eventDetail.payload.value;
+              tinymce.activeEditor.execCommand(cmd, ui, value);
+              break;
+
+            case 'tinymce.applyFormat':
+              this.editor = tinymce.activeEditor;
+              this.editor.undoManager.transact(function () {
+                this.editor.focus();
+                this.editor.formatter.apply(eventDetail.payload.format, {
+                  value: eventDetail.payload.value
+                });
+                this.editor.nodeChanged();
+              });
+              break;
+
+            case 'tinymce.removeFormat':
+              this.editor = tinymce.activeEditor;
+              this.editor.undoManager.transact(function () {
+                this.editor.focus();
+                this.editor.formatter.remove(eventDetail.payload.format, {
+                  value: null
+                }, null, true);
+                this.editor.nodeChanged();
+              });
+              break;
+
+            default:
+              break;
+          }
+        });
+      },
       removeMirrorMarkers: function removeMirrorMarkers() {
         // Remove any existing markers
         $('.' + this.MIRROR_ELEMENT_CLASS).removeClass(this.MIRROR_ELEMENT_CLASS);
@@ -271,7 +316,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/hcarneiro/Repos/Fliplet/fliplet-widget-text/js/libs/build.js */"./js/libs/build.js");
+module.exports = __webpack_require__(/*! C:\Users\hugoc\Documents\GitHub\Fliplet\fliplet-widget-text\js\libs\build.js */"./js/libs/build.js");
 
 
 /***/ })

@@ -6,3 +6,7 @@
 .mode-interact .mce-edit-focus {
   outline: none;
 }
+
+.mode-interact #mce-modal-block {
+  display: none !important;
+}

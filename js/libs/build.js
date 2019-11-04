@@ -25,6 +25,8 @@ Fliplet.Widget.instance('text', (widgetData) => {
       this.initializeEditor()
         .then(() => {
           this.isInitialized = true
+
+          this.eventHandlers()
         })
     },
     methods: {
@@ -153,6 +155,52 @@ Fliplet.Widget.instance('text', (widgetData) => {
               })
             }
           })
+        })
+      },
+      eventHandlers() {
+        Fliplet.Studio.onEvent(function (event) {
+          const eventDetail = event.detail
+
+          switch (eventDetail.type) {
+            case 'tinymce.execCommand':
+              if (!eventDetail.payload) {
+                break;
+              }
+
+              var cmd = eventDetail.payload.cmd;
+              var ui = eventDetail.payload.ui;
+              var value = eventDetail.payload.value;
+              tinymce.activeEditor.execCommand(cmd, ui, value);
+              break;
+            case 'tinymce.applyFormat':
+              this.editor = tinymce.activeEditor;
+              this.editor.undoManager.transact(function () {
+                this.editor.focus();
+                this.editor.formatter.apply(
+                  eventDetail.payload.format,
+                  {
+                    value: eventDetail.payload.value
+                  }
+                );
+                this.editor.nodeChanged();
+              });
+              break;
+            case 'tinymce.removeFormat':
+              this.editor = tinymce.activeEditor;
+              this.editor.undoManager.transact(function () {
+                this.editor.focus();
+                this.editor.formatter.remove(
+                  eventDetail.payload.format,
+                  {
+                    value: null
+                  }, null, true
+                );
+                this.editor.nodeChanged();
+              });
+              break;
+            default:
+              break;
+          }
         })
       },
       removeMirrorMarkers() {
