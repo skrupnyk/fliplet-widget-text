@@ -3,7 +3,8 @@
 }
 
 .mode-interact .mce-edit-highlight,
-.mode-interact .mce-edit-focus {
+.mode-interact .mce-edit-focus,
+.mode-interact .mce-content-body {
   outline: none;
 }
 
