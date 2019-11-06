@@ -1,5 +1,6 @@
 Fliplet.Widget.instance('text', (widgetData) => {
   const selector = '[data-text-id="' + widgetData.id + '"]';
+  var WIDGET_INSTANCE_CLASS = 'fl-widget-instance';
 
   new Vue({
     el: $(selector)[0],
@@ -39,7 +40,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
         }
 
         return new Promise((resolve, reject) => {
-          $(`[data-text-id="${this.settings.id}"]`).tinymce({
+          $element.tinymce({
             inline: true,
             menubar: false,
             force_br_newlines: false,
@@ -52,6 +53,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
               'searchreplace wordcount insertdatetime table textcolor colorpicker',
               'noneditable'
             ],
+            noneditable_noneditable_class: WIDGET_INSTANCE_CLASS,
             valid_styles: {
               '*': 'font-family,font-size,font-weight,font-style,text-decoration,text-align,padding,padding-left,padding-right,padding-top,padding-bottom,padding,margin-left,margin-right,margin-top,margin-bottom,margin,display,float,color,background,background-color,background-image,list-style-type,line-height,letter-spacing,width,height,min-width,max-width,min-height,max-height,border,border-top,border-bottom,border-left,border-right,position,opacity,top,left,right,bottom,overflow,z-index',
               img: 'text-align,margin-left,margin-right,display,float,width,height,background,background-color',
@@ -77,12 +79,12 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 // Remove any existing markers
                 this.removeMirrorMarkers()
 
-                // initialize value if it was set prior to initialization
-                if (this.settings.html) {
-                  editor.setContent(this.settings.html, {
-                    format: 'raw'
-                  })
-                }
+                // Removes position from Editor element.
+                // TinyMCE adds the position style to place the toolbar absolute positioned
+                // We hide the toolbar and the TinyMCE feature is causing problems
+                $element.attr('style', (i, style) => {
+                  return style.replace(/position[^;]+;?/g, '')
+                })
 
                 resolve()
               })
@@ -106,6 +108,8 @@ Fliplet.Widget.instance('text', (widgetData) => {
               })
 
               editor.on('blur', () => {
+                $element.parent().attr('draggable', true)
+
                 // Remove any existing markers
                 this.removeMirrorMarkers()
 

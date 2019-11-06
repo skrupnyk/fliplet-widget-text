@@ -95,6 +95,7 @@
 
 Fliplet.Widget.instance('text', function (widgetData) {
   var selector = '[data-text-id="' + widgetData.id + '"]';
+  var WIDGET_INSTANCE_CLASS = 'fl-widget-instance';
   new Vue({
     el: $(selector)[0],
     data: function data() {
@@ -136,7 +137,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
         }
 
         return new Promise(function (resolve, reject) {
-          $("[data-text-id=\"".concat(_this2.settings.id, "\"]")).tinymce({
+          $element.tinymce({
             inline: true,
             menubar: false,
             force_br_newlines: false,
@@ -145,6 +146,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
             object_resizing: false,
             verify_html: false,
             plugins: ['advlist lists link image charmap hr', 'searchreplace wordcount insertdatetime table textcolor colorpicker', 'noneditable'],
+            noneditable_noneditable_class: WIDGET_INSTANCE_CLASS,
             valid_styles: {
               '*': 'font-family,font-size,font-weight,font-style,text-decoration,text-align,padding,padding-left,padding-right,padding-top,padding-bottom,padding,margin-left,margin-right,margin-top,margin-bottom,margin,display,float,color,background,background-color,background-image,list-style-type,line-height,letter-spacing,width,height,min-width,max-width,min-height,max-height,border,border-top,border-bottom,border-left,border-right,position,opacity,top,left,right,bottom,overflow,z-index',
               img: 'text-align,margin-left,margin-right,display,float,width,height,background,background-color',
@@ -161,15 +163,14 @@ Fliplet.Widget.instance('text', function (widgetData) {
               editor.on('init', function () {
                 _this2.editor = editor; // Remove any existing markers
 
-                _this2.removeMirrorMarkers(); // initialize value if it was set prior to initialization
+                _this2.removeMirrorMarkers(); // Removes position from Editor element.
+                // TinyMCE adds the position style to place the toolbar absolute positioned
+                // We hide the toolbar and the TinyMCE feature is causing problems
 
 
-                if (_this2.settings.html) {
-                  editor.setContent(_this2.settings.html, {
-                    format: 'raw'
-                  });
-                }
-
+                $element.attr('style', function (i, style) {
+                  return style.replace(/position[^;]+;?/g, '');
+                });
                 resolve();
               });
               editor.on('change', function () {
@@ -188,7 +189,8 @@ Fliplet.Widget.instance('text', function (widgetData) {
                 Fliplet.Studio.emit('show-toolbar', true);
               });
               editor.on('blur', function () {
-                // Remove any existing markers
+                $element.parent().attr('draggable', true); // Remove any existing markers
+
                 _this2.removeMirrorMarkers(); // Save changes
 
 
@@ -316,7 +318,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/hcarneiro/Repos/Fliplet/fliplet-widget-text/js/libs/build.js */"./js/libs/build.js");
+module.exports = __webpack_require__(/*! C:\Users\hugoc\Documents\GitHub\Fliplet\fliplet-widget-text\js\libs\build.js */"./js/libs/build.js");
 
 
 /***/ })
