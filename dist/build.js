@@ -95,7 +95,6 @@
 
 Fliplet.Widget.instance('text', function (widgetData) {
   var selector = '[data-text-id="' + widgetData.id + '"]';
-  var WIDGET_INSTANCE_CLASS = 'fl-widget-instance';
   new Vue({
     el: $(selector)[0],
     data: function data() {
@@ -146,7 +145,6 @@ Fliplet.Widget.instance('text', function (widgetData) {
             object_resizing: false,
             verify_html: false,
             plugins: ['advlist lists link image charmap hr', 'searchreplace wordcount insertdatetime table textcolor colorpicker', 'noneditable'],
-            noneditable_noneditable_class: WIDGET_INSTANCE_CLASS,
             valid_styles: {
               '*': 'font-family,font-size,font-weight,font-style,text-decoration,text-align,padding,padding-left,padding-right,padding-top,padding-bottom,padding,margin-left,margin-right,margin-top,margin-bottom,margin,display,float,color,background,background-color,background-image,list-style-type,line-height,letter-spacing,width,height,min-width,max-width,min-height,max-height,border,border-top,border-bottom,border-left,border-right,position,opacity,top,left,right,bottom,overflow,z-index',
               img: 'text-align,margin-left,margin-right,display,float,width,height,background,background-color',
@@ -234,8 +232,14 @@ Fliplet.Widget.instance('text', function (widgetData) {
         });
       },
       eventHandlers: function eventHandlers() {
+        var _this3 = this;
+
         Fliplet.Studio.onEvent(function (event) {
           var eventDetail = event.detail;
+
+          if (!_this3.editor || !tinymce.activeEditor || _this3.editor.id !== tinymce.activeEditor.id) {
+            return;
+          }
 
           switch (eventDetail.type) {
             case 'tinymce.execCommand':
@@ -250,25 +254,33 @@ Fliplet.Widget.instance('text', function (widgetData) {
               break;
 
             case 'tinymce.applyFormat':
-              this.editor = tinymce.activeEditor;
-              this.editor.undoManager.transact(function () {
-                this.editor.focus();
-                this.editor.formatter.apply(eventDetail.payload.format, {
+              _this3.editor = tinymce.activeEditor;
+
+              _this3.editor.undoManager.transact(function () {
+                _this3.editor.focus();
+
+                _this3.editor.formatter.apply(eventDetail.payload.format, {
                   value: eventDetail.payload.value
                 });
-                this.editor.nodeChanged();
+
+                _this3.editor.nodeChanged();
               });
+
               break;
 
             case 'tinymce.removeFormat':
-              this.editor = tinymce.activeEditor;
-              this.editor.undoManager.transact(function () {
-                this.editor.focus();
-                this.editor.formatter.remove(eventDetail.payload.format, {
+              _this3.editor = tinymce.activeEditor;
+
+              _this3.editor.undoManager.transact(function () {
+                _this3.editor.focus();
+
+                _this3.editor.formatter.remove(eventDetail.payload.format, {
                   value: null
                 }, null, true);
-                this.editor.nodeChanged();
+
+                _this3.editor.nodeChanged();
               });
+
               break;
 
             default:
