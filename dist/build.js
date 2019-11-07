@@ -179,6 +179,11 @@ Fliplet.Widget.instance('text', function (widgetData) {
 
                 _this2.debounceSave();
               });
+              editor.on('keydown', function () {
+                Fliplet.Studio.emit('get-selected-widget', _this2.settings.id); // Save changes
+
+                _this2.debounceSave();
+              });
               editor.on('focus', function () {
                 Fliplet.Studio.emit('get-selected-widget', {
                   value: _this2.settings.id,

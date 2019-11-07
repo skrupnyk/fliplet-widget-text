@@ -97,6 +97,13 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 this.debounceSave()
               })
 
+              editor.on('keydown', () => {
+                Fliplet.Studio.emit('get-selected-widget', this.settings.id)
+
+                // Save changes
+                this.debounceSave()
+              })
+
               editor.on('focus', () => {
                 Fliplet.Studio.emit('get-selected-widget', {
                   value: this.settings.id,
