@@ -19,7 +19,6 @@ Fliplet.Widget.instance('text', (widgetData) => {
       }
     },
     mounted() {
-      console.log('MOUNTED')
       if (this.mode !== 'interact' && !this.isDev) {
         return
       }

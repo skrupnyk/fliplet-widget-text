@@ -115,8 +115,6 @@ Fliplet.Widget.instance('text', function (widgetData) {
     mounted: function mounted() {
       var _this = this;
 
-      console.log('MOUNTED');
-
       if (this.mode !== 'interact' && !this.isDev) {
         return;
       }
