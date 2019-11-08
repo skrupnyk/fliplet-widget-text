@@ -14,10 +14,12 @@ Fliplet.Widget.instance('text', (widgetData) => {
         WIDGET_INSTANCE_SELECTOR: '[data-fl-widget-instance]',
         changed: false,
         debounceSave: _.debounce(this.saveChanges, 500),
-        isInitialized: false
+        isInitialized: false,
+        onBlur: false
       }
     },
     mounted() {
+      console.log('MOUNTED')
       if (this.mode !== 'interact' && !this.isDev) {
         return
       }
@@ -25,17 +27,20 @@ Fliplet.Widget.instance('text', (widgetData) => {
       this.initializeEditor()
         .then(() => {
           this.isInitialized = true
+          this.editor.hide()
 
-          this.eventHandlers()
+          this.studioEventHandler()
+          this.attachEventHandler()
         })
     },
     methods: {
       initializeEditor() {
-        const $element = $(`[data-text-id="${this.settings.id}"]`)
+        const $element = $(`#wysiwyg-${this.settings.id}`)
         this.editor = tinymce.get($element.attr('id'))
 
         if (this.editor) {
-          return Promise.resolve() 
+          this.editor.remove()
+          this.editor = null
         }
 
         return new Promise((resolve, reject) => {
@@ -105,14 +110,11 @@ Fliplet.Widget.instance('text', (widgetData) => {
               })
 
               editor.on('focus', () => {
-                Fliplet.Studio.emit('get-selected-widget', {
-                  value: this.settings.id,
-                  active: true
-                })
                 Fliplet.Studio.emit('show-toolbar', true)
               })
 
               editor.on('blur', () => {
+                this.onBlur = true
                 $element.parent().attr('draggable', true)
 
                 // Remove any existing markers
@@ -166,7 +168,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
           })
         })
       },
-      eventHandlers() {
+      studioEventHandler() {
         Fliplet.Studio.onEvent((event) => {
           const eventDetail = event.detail
 
@@ -216,6 +218,16 @@ Fliplet.Widget.instance('text', (widgetData) => {
           }
         })
       },
+      attachEventHandler() {
+        $(`#wysiwyg-${this.settings.id}`).on('click', () => {
+          this.editor.show()
+
+          Fliplet.Studio.emit('get-selected-widget', {
+            value: this.settings.id,
+            active: true
+          })
+        })
+      },
       removeMirrorMarkers() {
         // Remove any existing markers
         $('.' + this.MIRROR_ELEMENT_CLASS).removeClass(this.MIRROR_ELEMENT_CLASS)
@@ -234,6 +246,13 @@ Fliplet.Widget.instance('text', (widgetData) => {
         const data = {
           html: this.editor.getContent()
         }
+
+        if (this.onBlur) {
+          // Remove tinymce on blur
+          this.editor.hide()
+        }
+
+        this.onBlur = false
 
         const $html = $('<div>' + data.html + '</div>').clone()
         $replacedHTML = this.replaceWidgetInstances($html)

@@ -108,11 +108,14 @@ Fliplet.Widget.instance('text', function (widgetData) {
         WIDGET_INSTANCE_SELECTOR: '[data-fl-widget-instance]',
         changed: false,
         debounceSave: _.debounce(this.saveChanges, 500),
-        isInitialized: false
+        isInitialized: false,
+        onBlur: false
       };
     },
     mounted: function mounted() {
       var _this = this;
+
+      console.log('MOUNTED');
 
       if (this.mode !== 'interact' && !this.isDev) {
         return;
@@ -121,18 +124,23 @@ Fliplet.Widget.instance('text', function (widgetData) {
       this.initializeEditor().then(function () {
         _this.isInitialized = true;
 
-        _this.eventHandlers();
+        _this.editor.hide();
+
+        _this.studioEventHandler();
+
+        _this.attachEventHandler();
       });
     },
     methods: {
       initializeEditor: function initializeEditor() {
         var _this2 = this;
 
-        var $element = $("[data-text-id=\"".concat(this.settings.id, "\"]"));
+        var $element = $("#wysiwyg-".concat(this.settings.id));
         this.editor = tinymce.get($element.attr('id'));
 
         if (this.editor) {
-          return Promise.resolve();
+          this.editor.remove();
+          this.editor = null;
         }
 
         return new Promise(function (resolve, reject) {
@@ -185,13 +193,10 @@ Fliplet.Widget.instance('text', function (widgetData) {
                 _this2.debounceSave();
               });
               editor.on('focus', function () {
-                Fliplet.Studio.emit('get-selected-widget', {
-                  value: _this2.settings.id,
-                  active: true
-                });
                 Fliplet.Studio.emit('show-toolbar', true);
               });
               editor.on('blur', function () {
+                _this2.onBlur = true;
                 $element.parent().attr('draggable', true); // Remove any existing markers
 
                 _this2.removeMirrorMarkers(); // Save changes
@@ -236,7 +241,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
           });
         });
       },
-      eventHandlers: function eventHandlers() {
+      studioEventHandler: function studioEventHandler() {
         var _this3 = this;
 
         Fliplet.Studio.onEvent(function (event) {
@@ -293,6 +298,18 @@ Fliplet.Widget.instance('text', function (widgetData) {
           }
         });
       },
+      attachEventHandler: function attachEventHandler() {
+        var _this4 = this;
+
+        $("#wysiwyg-".concat(this.settings.id)).on('click', function () {
+          _this4.editor.show();
+
+          Fliplet.Studio.emit('get-selected-widget', {
+            value: _this4.settings.id,
+            active: true
+          });
+        });
+      },
       removeMirrorMarkers: function removeMirrorMarkers() {
         // Remove any existing markers
         $('.' + this.MIRROR_ELEMENT_CLASS).removeClass(this.MIRROR_ELEMENT_CLASS);
@@ -309,6 +326,13 @@ Fliplet.Widget.instance('text', function (widgetData) {
         var data = {
           html: this.editor.getContent()
         };
+
+        if (this.onBlur) {
+          // Remove tinymce on blur
+          this.editor.hide();
+        }
+
+        this.onBlur = false;
         var $html = $('<div>' + data.html + '</div>').clone();
         $replacedHTML = this.replaceWidgetInstances($html);
         data.html = $replacedHTML.html();

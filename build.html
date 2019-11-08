@@ -1,4 +1,4 @@
-<div data-text-id="{{ id }}" data-text-uuid="{{ uuid }}">
+<div id="wysiwyg-{{ id }}" data-text-id="{{ id }}" data-text-uuid="{{ uuid }}">
   <span v-if="settings && settings.html" v-html="settings.html"></span>
   <template v-else>
     <p v-if="mode === 'interact' || isDev">Click here to start typing...</p>
