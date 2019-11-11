@@ -109,6 +109,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
               })
 
               editor.on('focus', () => {
+                $element.parent().attr('draggable', false)
                 Fliplet.Studio.emit('show-toolbar', true)
               })
 

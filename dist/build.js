@@ -191,6 +191,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
                 _this2.debounceSave();
               });
               editor.on('focus', function () {
+                $element.parent().attr('draggable', false);
                 Fliplet.Studio.emit('show-toolbar', true);
               });
               editor.on('blur', function () {
