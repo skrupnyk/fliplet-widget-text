@@ -74,6 +74,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
               'blockquote subscript superscript | link table insertdatetime charmap hr |',
               'removeformat'
             ].join(' '),
+            fontsize_formats: '8px 10px 12px 14px 16px 18px 24px 36px',
             setup: (editor) => {
               editor.on('init', () => {
                 this.editor = editor

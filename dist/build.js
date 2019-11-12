@@ -163,6 +163,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
             },
             valid_children: '+body[style],-font[face],div[br,#text],img,+span[div|section|ul|ol|form|header|footer|article|hr|table]',
             toolbar: ['formatselect | fontselect fontsizeselect |', 'bold italic underline strikethrough | forecolor backcolor |', 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |', 'blockquote subscript superscript | link table insertdatetime charmap hr |', 'removeformat'].join(' '),
+            fontsize_formats: '8px 10px 12px 14px 16px 18px 24px 36px',
             setup: function setup(editor) {
               editor.on('init', function () {
                 _this2.editor = editor; // Remove any existing markers
@@ -358,7 +359,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\hugoc\Documents\GitHub\Fliplet\fliplet-widget-text\js\libs\build.js */"./js/libs/build.js");
+module.exports = __webpack_require__(/*! /Users/hcarneiro/Repos/Fliplet/fliplet-widget-text/js/libs/build.js */"./js/libs/build.js");
 
 
 /***/ })
