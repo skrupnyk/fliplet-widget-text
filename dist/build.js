@@ -175,19 +175,30 @@ Fliplet.Widget.instance('text', function (widgetData) {
 
                 $element.attr('style', function (i, style) {
                   return style.replace(/position[^;]+;?/g, '');
-                });
+                }); // To process image selection after image is loaded
+
+                Fliplet.Studio.emit('get-selected-widget');
                 resolve();
               });
               editor.on('change', function () {
                 Fliplet.Studio.emit('get-selected-widget', _this2.settings.id); // Remove any existing markers
 
-                _this2.removeMirrorMarkers(); // Save changes
+                _this2.removeMirrorMarkers();
+
+                if (!_this2.isInitialized) {
+                  return;
+                } // Save changes
 
 
                 _this2.debounceSave();
               });
               editor.on('keydown', function () {
-                Fliplet.Studio.emit('get-selected-widget', _this2.settings.id); // Save changes
+                Fliplet.Studio.emit('get-selected-widget', _this2.settings.id);
+
+                if (!_this2.isInitialized) {
+                  return;
+                } // Save changes
+
 
                 _this2.debounceSave();
               });
@@ -199,7 +210,11 @@ Fliplet.Widget.instance('text', function (widgetData) {
                 _this2.onBlur = true;
                 $element.parent().attr('draggable', true); // Remove any existing markers
 
-                _this2.removeMirrorMarkers(); // Save changes
+                _this2.removeMirrorMarkers();
+
+                if (!_this2.isInitialized) {
+                  return;
+                } // Save changes
 
 
                 _this2.debounceSave();
@@ -233,7 +248,12 @@ Fliplet.Widget.instance('text', function (widgetData) {
                     html: e.parents.length ? e.parents[e.parents.length - 1].outerHTML : e.element.outerHTML,
                     styles: ['.' + _this2.MIRROR_ELEMENT_CLASS + ' {', '\tfont-family: ' + fontFamily + ';', '\tfont-size: ' + fontSize + ';', '}'].join('\n')
                   }
-                }); // Save changes
+                });
+
+                if (!_this2.isInitialized) {
+                  return;
+                } // Save changes
+
 
                 _this2.debounceSave();
               });
@@ -359,7 +379,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/hcarneiro/Repos/Fliplet/fliplet-widget-text/js/libs/build.js */"./js/libs/build.js");
+module.exports = __webpack_require__(/*! C:\Users\hugoc\Documents\GitHub\Fliplet\fliplet-widget-text\js\libs\build.js */"./js/libs/build.js");
 
 
 /***/ })

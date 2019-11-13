@@ -89,6 +89,9 @@ Fliplet.Widget.instance('text', (widgetData) => {
                   return style.replace(/position[^;]+;?/g, '')
                 })
 
+                // To process image selection after image is loaded
+                Fliplet.Studio.emit('get-selected-widget');
+
                 resolve()
               })
 
@@ -98,12 +101,20 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 // Remove any existing markers
                 this.removeMirrorMarkers()
 
+                if (!this.isInitialized) {
+                  return
+                }
+
                 // Save changes
                 this.debounceSave()
               })
 
               editor.on('keydown', () => {
                 Fliplet.Studio.emit('get-selected-widget', this.settings.id)
+
+                if (!this.isInitialized) {
+                  return
+                }
 
                 // Save changes
                 this.debounceSave()
@@ -120,6 +131,10 @@ Fliplet.Widget.instance('text', (widgetData) => {
 
                 // Remove any existing markers
                 this.removeMirrorMarkers()
+
+                if (!this.isInitialized) {
+                  return
+                }
 
                 // Save changes
                 this.debounceSave()
@@ -161,6 +176,10 @@ Fliplet.Widget.instance('text', (widgetData) => {
                     ].join('\n')
                   }
                 })
+
+                if (!this.isInitialized) {
+                  return
+                }
 
                 // Save changes
                 this.debounceSave()
