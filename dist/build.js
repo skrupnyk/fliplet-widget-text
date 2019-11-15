@@ -333,7 +333,9 @@ Fliplet.Widget.instance('text', function (widgetData) {
       removeMirrorMarkers: function removeMirrorMarkers() {
         // Remove any existing markers
         $('.' + this.MIRROR_ELEMENT_CLASS).removeClass(this.MIRROR_ELEMENT_CLASS);
-        $('.' + this.MIRROR_ROOT_CLASS).removeClass(this.MIRROR_ROOT_CLASS);
+        $('.' + this.MIRROR_ROOT_CLASS).removeClass(this.MIRROR_ROOT_CLASS); // Remove empty class attributes
+
+        $('[class=""]').removeAttr('class');
       },
       replaceWidgetInstances: function replaceWidgetInstances($html) {
         $html.find(this.WIDGET_INSTANCE_SELECTOR).replaceWith(function () {
@@ -379,7 +381,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\hugoc\Documents\GitHub\Fliplet\fliplet-widget-text\js\libs\build.js */"./js/libs/build.js");
+module.exports = __webpack_require__(/*! /Users/hcarneiro/Repos/Fliplet/fliplet-widget-text/js/libs/build.js */"./js/libs/build.js");
 
 
 /***/ })

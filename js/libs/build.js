@@ -252,6 +252,9 @@ Fliplet.Widget.instance('text', (widgetData) => {
         // Remove any existing markers
         $('.' + this.MIRROR_ELEMENT_CLASS).removeClass(this.MIRROR_ELEMENT_CLASS)
         $('.' + this.MIRROR_ROOT_CLASS).removeClass(this.MIRROR_ROOT_CLASS)
+
+        // Remove empty class attributes
+        $('[class=""]').removeAttr('class')
       },
       replaceWidgetInstances($html) {
         $html.find(this.WIDGET_INSTANCE_SELECTOR).replaceWith(function () {
