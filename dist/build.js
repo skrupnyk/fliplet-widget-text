@@ -168,7 +168,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
               editor.on('init', function () {
                 _this2.editor = editor; // Remove any existing markers
 
-                _this2.removeMirrorMarkers(); // Removes position from Editor element.
+                _this2.cleanUpContent(); // Removes position from Editor element.
                 // TinyMCE adds the position style to place the toolbar absolute positioned
                 // We hide the toolbar and the TinyMCE feature is causing problems
 
@@ -183,7 +183,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
               editor.on('change', function () {
                 Fliplet.Studio.emit('get-selected-widget', _this2.settings.id); // Remove any existing markers
 
-                _this2.removeMirrorMarkers();
+                _this2.cleanUpContent();
 
                 if (!_this2.isInitialized) {
                   return;
@@ -210,7 +210,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
                 _this2.onBlur = true;
                 $element.parent().attr('draggable', true); // Remove any existing markers
 
-                _this2.removeMirrorMarkers();
+                _this2.cleanUpContent();
 
                 if (!_this2.isInitialized) {
                   return;
@@ -230,7 +230,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
                 } // Remove any existing markers
 
 
-                _this2.removeMirrorMarkers(); // Mark e.element and the last element of e.parents with classes
+                _this2.cleanUpContent(); // Mark e.element and the last element of e.parents with classes
 
 
                 e.element.classList.add(_this2.MIRROR_ELEMENT_CLASS);
@@ -313,6 +313,12 @@ Fliplet.Widget.instance('text', function (widgetData) {
 
               break;
 
+            case 'widgetCancel':
+              if (_this3.onBlur) {
+                // Remove tinymce on blur
+                _this3.editor.hide();
+              }
+
             default:
               break;
           }
@@ -330,7 +336,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
           });
         });
       },
-      removeMirrorMarkers: function removeMirrorMarkers() {
+      cleanUpContent: function cleanUpContent() {
         // Remove any existing markers
         $('.' + this.MIRROR_ELEMENT_CLASS).removeClass(this.MIRROR_ELEMENT_CLASS);
         $('.' + this.MIRROR_ROOT_CLASS).removeClass(this.MIRROR_ROOT_CLASS); // Remove empty class attributes
@@ -348,12 +354,6 @@ Fliplet.Widget.instance('text', function (widgetData) {
         var data = {
           html: this.editor.getContent()
         };
-
-        if (this.onBlur) {
-          // Remove tinymce on blur
-          this.editor.hide();
-        }
-
         this.onBlur = false;
         var $html = $('<div>' + data.html + '</div>').clone();
         $replacedHTML = this.replaceWidgetInstances($html);
@@ -381,7 +381,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/hcarneiro/Repos/Fliplet/fliplet-widget-text/js/libs/build.js */"./js/libs/build.js");
+module.exports = __webpack_require__(/*! C:\Users\hugoc\Documents\GitHub\Fliplet\fliplet-widget-text\js\libs\build.js */"./js/libs/build.js");
 
 
 /***/ })

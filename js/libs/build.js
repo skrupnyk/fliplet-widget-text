@@ -80,7 +80,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 this.editor = editor
 
                 // Remove any existing markers
-                this.removeMirrorMarkers()
+                this.cleanUpContent()
 
                 // Removes position from Editor element.
                 // TinyMCE adds the position style to place the toolbar absolute positioned
@@ -99,7 +99,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 Fliplet.Studio.emit('get-selected-widget', this.settings.id)
 
                 // Remove any existing markers
-                this.removeMirrorMarkers()
+                this.cleanUpContent()
 
                 if (!this.isInitialized) {
                   return
@@ -130,7 +130,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 $element.parent().attr('draggable', true)
 
                 // Remove any existing markers
-                this.removeMirrorMarkers()
+                this.cleanUpContent()
 
                 if (!this.isInitialized) {
                   return
@@ -150,7 +150,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 }
 
                 // Remove any existing markers
-                this.removeMirrorMarkers()
+                this.cleanUpContent()
 
                 // Mark e.element and the last element of e.parents with classes
                 e.element.classList.add(this.MIRROR_ELEMENT_CLASS)
@@ -233,6 +233,11 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 this.editor.nodeChanged()
               });
               break
+            case 'widgetCancel':
+              if (this.onBlur) {
+                // Remove tinymce on blur
+                this.editor.hide()
+              }
             default:
               break
           }
@@ -248,7 +253,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
           })
         })
       },
-      removeMirrorMarkers() {
+      cleanUpContent() {
         // Remove any existing markers
         $('.' + this.MIRROR_ELEMENT_CLASS).removeClass(this.MIRROR_ELEMENT_CLASS)
         $('.' + this.MIRROR_ROOT_CLASS).removeClass(this.MIRROR_ROOT_CLASS)
@@ -268,11 +273,6 @@ Fliplet.Widget.instance('text', (widgetData) => {
       saveChanges() {
         const data = {
           html: this.editor.getContent()
-        }
-
-        if (this.onBlur) {
-          // Remove tinymce on blur
-          this.editor.hide()
         }
 
         this.onBlur = false
