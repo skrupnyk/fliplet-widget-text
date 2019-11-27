@@ -203,12 +203,12 @@ Fliplet.Widget.instance('text', function (widgetData) {
                 _this2.debounceSave();
               });
               editor.on('focus', function () {
-                $element.parent().attr('draggable', false);
+                $element.parents('[draggable="true"]').attr('draggable', false);
                 Fliplet.Studio.emit('show-toolbar', true);
               });
               editor.on('blur', function () {
                 _this2.onBlur = true;
-                $element.parent().attr('draggable', true); // Remove any existing markers
+                $element.parents('[draggable="false"]').attr('draggable', true); // Remove any existing markers
 
                 _this2.cleanUpContent();
 

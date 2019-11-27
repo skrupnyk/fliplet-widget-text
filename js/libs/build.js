@@ -121,13 +121,13 @@ Fliplet.Widget.instance('text', (widgetData) => {
               })
 
               editor.on('focus', () => {
-                $element.parent().attr('draggable', false)
+                $element.parents('[draggable="true"]').attr('draggable', false)
                 Fliplet.Studio.emit('show-toolbar', true)
               })
 
               editor.on('blur', () => {
                 this.onBlur = true
-                $element.parent().attr('draggable', true)
+                $element.parents('[draggable="false"]').attr('draggable', true)
 
                 // Remove any existing markers
                 this.cleanUpContent()
