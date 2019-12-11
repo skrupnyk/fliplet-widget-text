@@ -351,6 +351,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
         return $html;
       },
       saveChanges: function saveChanges() {
+        this.cleanUpContent();
         var data = {
           html: this.editor.getContent()
         };
