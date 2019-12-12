@@ -98,9 +98,6 @@ Fliplet.Widget.instance('text', (widgetData) => {
               editor.on('change', () => {
                 Fliplet.Studio.emit('get-selected-widget', this.settings.id)
 
-                // Remove any existing markers
-                this.cleanUpContent()
-
                 if (!this.isInitialized) {
                   return
                 }
@@ -129,9 +126,6 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 this.onBlur = true
                 $element.parents('[draggable="false"]').attr('draggable', true)
 
-                // Remove any existing markers
-                this.cleanUpContent()
-
                 if (!this.isInitialized) {
                   return
                 }
@@ -148,9 +142,6 @@ Fliplet.Widget.instance('text', (widgetData) => {
                 if (this.isInitialized) {
                   Fliplet.Studio.emit('get-selected-widget', this.settings.id)
                 }
-
-                // Remove any existing markers
-                this.cleanUpContent()
 
                 // Mark e.element and the last element of e.parents with classes
                 e.element.classList.add(this.MIRROR_ELEMENT_CLASS)
