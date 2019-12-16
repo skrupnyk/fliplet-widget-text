@@ -9,12 +9,11 @@
   "interface": {
     "dependencies": [
       "fliplet-core",
-      "fliplet-studio-ui",
-      "vue.js"
+      "fliplet-studio-ui"
     ],
     "assets": [
       "css/interface.css",
-      "dist/interface.js"
+      "js/interface.js"
     ]
   },
   "build": {
@@ -22,12 +21,12 @@
       "fliplet-core",
       "lodash",
       "handlebars",
-      "tinymce",
-      "vue.js"
+      "tinymce"
     ],
     "assets": [
       "css/build.css",
-      "dist/build.js"
+      "js/build.templates.js",
+      "js/build.js"
     ]
   },
   "references": [
