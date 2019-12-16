@@ -279,8 +279,8 @@ Fliplet.Widget.instance('text', (widgetData) => {
   }
 
   function registerHandlebarsHelpers() {
-    Handlebars.registerHelper('isInteractable', function(a, b, options) {
-      var result = a === 'interact' || b;
+    Handlebars.registerHelper('isInteractable', function(options) {
+      var result = mode === 'interact' || isDev;
 
       if (result === false) {
         return options.inverse(this);

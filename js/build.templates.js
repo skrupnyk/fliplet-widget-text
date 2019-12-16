@@ -7,7 +7,10 @@ this["Fliplet"]["Widget"]["Templates"]["templates.build.content"] = Handlebars.t
 },"3":function(container,depth0,helpers,partials,data) {
     return "  <p>&nbsp;</p>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1;
+    var stack1, helper, options, buffer = "";
 
-  return ((stack1 = (helpers.isInteractable || (depth0 && depth0.isInteractable) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.mode : depth0),(depth0 != null ? depth0.isDev : depth0),{"name":"isInteractable","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "");
+  stack1 = ((helper = (helper = helpers.isInteractable || (depth0 != null ? depth0.isInteractable : depth0)) != null ? helper : helpers.helperMissing),(options={"name":"isInteractable","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data}),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),options) : helper));
+  if (!helpers.isInteractable) { stack1 = helpers.blockHelperMissing.call(depth0,stack1,options)}
+  if (stack1 != null) { buffer += stack1; }
+  return buffer;
 },"useData":true});
