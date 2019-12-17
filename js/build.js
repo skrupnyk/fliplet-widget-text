@@ -3,7 +3,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
   var MIRROR_ELEMENT_CLASS = 'fl-mirror-element';
   var MIRROR_ROOT_CLASS = 'fl-mirror-root';
   var WIDGET_INSTANCE_SELECTOR = '[data-fl-widget-instance]';
-  var $WYSIWYG_SELECTOR = $('[data-widget-id="wysiwyg-' + widgetData.id + '"]');
+  var $WYSIWYG_SELECTOR = $('[data-text-id="' + widgetData.id + '"]');
   var debounceSave = _.debounce(saveChanges, 500);
   var mode = Fliplet.Env.get('mode');
   var isDev = Fliplet.Env.get('development');
