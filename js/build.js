@@ -2,6 +2,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
   var editor;
   var MIRROR_ELEMENT_CLASS = 'fl-mirror-element';
   var MIRROR_ROOT_CLASS = 'fl-mirror-root';
+  var PLACEHOLDER_CLASS = 'fl-text-placeholder';
   var WIDGET_INSTANCE_SELECTOR = '[data-fl-widget-instance]';
   var $WYSIWYG_SELECTOR = $('[data-text-id="' + widgetData.id + '"]');
   var debounceSave = _.debounce(saveChanges, 500);
@@ -15,6 +16,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
     // Remove any existing markers
     $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
     $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
+    $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
 
     // Remove empty class attributes
     $('[class=""]').removeAttr('class');
@@ -34,7 +36,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
     cleanUpContent();
 
     var data = {
-      html: editor.getContent()
+      html: editor.getContent() || widgetData.html
     };
 
     onBlur = false;
@@ -55,6 +57,8 @@ Fliplet.Widget.instance('text', (widgetData) => {
           Fliplet.Studio.emit('page-preview-send-event', {
             type: 'savePage'
           });
+
+          _.assignIn(widgetData, data)
         });
   }
 
@@ -176,9 +180,6 @@ Fliplet.Widget.instance('text', (widgetData) => {
           ed.on('init', function () {
             editor = ed
 
-            // Remove any existing markers
-            cleanUpContent();
-
             // Removes position from Editor element.
             // TinyMCE adds the position style to place the toolbar absolute positioned
             // We hide the toolbar and the TinyMCE feature is causing problems
@@ -291,12 +292,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
   }
 
   function insertPlaceholder() {
-    _.assignIn(widgetData, {
-      mode: mode,
-      isDev: isDev
-    });
-
-    var contentHTML = contentTemplate(widgetData);
+    var contentHTML = contentTemplate();
 
     $WYSIWYG_SELECTOR.append(contentHTML);
   }
@@ -304,7 +300,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
   function init() {
     registerHandlebarsHelpers();
 
-    if (!widgetData.html) {
+    if (!widgetData.html && !$WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
       insertPlaceholder();
     }
 
