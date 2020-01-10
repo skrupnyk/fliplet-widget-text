@@ -1,4 +1,4 @@
-Fliplet.Widget.instance('text', (widgetData) => {
+Fliplet.Widget.instance('text', function (widgetData) {
   var editor;
   var MIRROR_ELEMENT_CLASS = 'fl-mirror-element';
   var MIRROR_ROOT_CLASS = 'fl-mirror-root';
@@ -49,11 +49,11 @@ Fliplet.Widget.instance('text', (widgetData) => {
     return Fliplet.Env.get('development')
       ? Promise.resolve()
       : Fliplet.API.request({
-          url: `v1/widget-instances/${widgetData.id}`,
+          url: 'v1/widget-instances/' + widgetData.id,
           method: 'PUT',
           data: data
         })
-        .then(() => {
+        .then(function () {
           Fliplet.Studio.emit('page-preview-send-event', {
             type: 'savePage'
           });
@@ -63,8 +63,8 @@ Fliplet.Widget.instance('text', (widgetData) => {
   }
 
   function studioEventHandler() {
-    Fliplet.Studio.onEvent((event) => {
-      var eventDetail = event.detail
+    Fliplet.Studio.onEvent(function (event) {
+      var eventDetail = event.detail;
 
       if (!editor || !tinymce.activeEditor || editor.id !== tinymce.activeEditor.id) {
         return;
@@ -131,7 +131,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
         value: widgetData.id,
         active: true
       });
-    })
+    });
   }
 
   function initializeEditor() {
@@ -143,7 +143,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
       editor = null;
     }
 
-    return new Promise((resolve) => {
+    return new Promise(function (resolve) {
       $element.tinymce({
         inline: true,
         menubar: false,
@@ -176,9 +176,9 @@ Fliplet.Widget.instance('text', (widgetData) => {
           'removeformat'
         ].join(' '),
         fontsize_formats: '8px 10px 12px 14px 16px 18px 24px 36px',
-        setup: (ed) => {
+        setup: function (ed) {
           ed.on('init', function () {
-            editor = ed
+            editor = ed;
 
             // Removes position from Editor element.
             // TinyMCE adds the position style to place the toolbar absolute positioned
@@ -309,7 +309,7 @@ Fliplet.Widget.instance('text', (widgetData) => {
     }
 
     initializeEditor()
-      .then(() => {
+      .then(function () {
         isInitialized = true;
         editor.hide();
 
