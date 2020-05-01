@@ -20,8 +20,7 @@
     "dependencies": [
       "fliplet-core",
       "lodash",
-      "handlebars",
-      "tinymce"
+      "handlebars"
     ],
     "assets": [
       "css/build.css",
