@@ -44,22 +44,33 @@ Fliplet.Widget.instance('text', function (widgetData) {
     var $html = $('<div>' + data.html + '</div>').clone();
     var $replacedHTML = replaceWidgetInstances($html);
 
-    data.html = $replacedHTML.html();
+    // Pass HTML content through a hook so any JavaScript that has changed the HTML
+    // can use this to revert the HTML changes
+    return Fliplet.Hooks.run('beforeSavePageContent', $replacedHTML.html())
+      .then(function (html) {
+        if (!Array.isArray(html) || !html.length) {
+          html = [$replacedHTML.html()];
+        }
 
-    return Fliplet.Env.get('development')
-      ? Promise.resolve()
-      : Fliplet.API.request({
-          url: 'v1/widget-instances/' + widgetData.id,
-          method: 'PUT',
-          data: data
-        })
-        .then(function () {
-          Fliplet.Studio.emit('page-preview-send-event', {
-            type: 'savePage'
-          });
+        return html[html.length - 1];
+      }).then(function (html) {
+        data.html = html;
 
-          _.assignIn(widgetData, data)
+        return Fliplet.Env.get('development')
+          ? Promise.resolve()
+          : Fliplet.API.request({
+              url: 'v1/widget-instances/' + widgetData.id,
+              method: 'PUT',
+              data: data
+            })
+      })
+      .then(function () {
+        Fliplet.Studio.emit('page-preview-send-event', {
+          type: 'savePage'
         });
+
+        _.assignIn(widgetData, data)
+      });
   }
 
   function studioEventHandler() {
