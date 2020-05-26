@@ -139,8 +139,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
       editor.show();
 
       Fliplet.Studio.emit('get-selected-widget', {
-        value: widgetData.id,
-        active: true
+        value: widgetData.id
       });
     });
   }
@@ -229,11 +228,14 @@ Fliplet.Widget.instance('text', function (widgetData) {
           ed.on('focus', function () {
             $element.parents('[draggable="true"]').attr('draggable', false);
             Fliplet.Studio.emit('show-toolbar', true);
+            Fliplet.Studio.emit('set-wysiwyg-status', true);
           })
 
           ed.on('blur', function () {
             onBlur = true;
             $element.parents('[draggable="false"]').attr('draggable', true);
+
+            Fliplet.Studio.emit('set-wysiwyg-status', false);
 
             if (!isInitialized) {
               return;
