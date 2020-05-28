@@ -138,9 +138,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
     $WYSIWYG_SELECTOR.on('click', function () {
       editor.show();
 
-      Fliplet.Studio.emit('get-selected-widget', {
-        value: widgetData.id
-      });
+      Fliplet.Widget.updateHighlightDimensions(widgetData.id);
     });
   }
 
