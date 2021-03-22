@@ -214,7 +214,7 @@ Fliplet.Widget.instance('text', function(widgetData) {
             debounceSave();
           });
 
-          ed.on('keydown', function () {
+          ed.on('input', function() {
             Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
             if (!isInitialized) {
