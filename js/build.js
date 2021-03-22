@@ -11,6 +11,7 @@ Fliplet.Widget.instance('text', function(widgetData) {
   var isInitialized = false;
   var onBlur = false;
   var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
+  var lastSavedHtml;
 
   function cleanUpContent() {
     // Remove any existing markers
@@ -55,6 +56,18 @@ Fliplet.Widget.instance('text', function(widgetData) {
         return html[html.length - 1];
       }).then(function(html) {
         data.html = html;
+
+        // Cache HTML for the first time
+        if (typeof lastSavedHtml === 'undefined') {
+          lastSavedHtml = data.html;
+        }
+
+        // HTML has not changed. No need to save.
+        if (lastSavedHtml === data.html) {
+          return;
+        }
+
+        lastSavedHtml = data.html;
 
         return Fliplet.Env.get('development')
           ? Promise.resolve()
