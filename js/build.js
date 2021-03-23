@@ -58,6 +58,8 @@ Fliplet.Widget.instance('text', function(widgetData) {
         data.html = html;
 
         // Cache HTML for the first time
+        // The first save is always triggered by 'nodeChange' event on focus
+        // so there's no need to save anything
         if (typeof lastSavedHtml === 'undefined') {
           lastSavedHtml = data.html;
         }
