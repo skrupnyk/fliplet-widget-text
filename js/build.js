@@ -77,14 +77,13 @@ Fliplet.Widget.instance('text', function(widgetData) {
             url: 'v1/widget-instances/' + widgetData.id,
             method: 'PUT',
             data: data
-          });
-      })
-      .then(function() {
-        Fliplet.Studio.emit('page-preview-send-event', {
-          type: 'savePage'
-        });
+          }).then(function() {
+            Fliplet.Studio.emit('page-preview-send-event', {
+              type: 'savePage'
+            });
 
-        _.assignIn(widgetData, data);
+            _.assignIn(widgetData, data);
+          });
       });
   }
 
