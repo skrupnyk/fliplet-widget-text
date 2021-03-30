@@ -1,4 +1,4 @@
-Fliplet.Widget.instance('text', function (widgetData) {
+Fliplet.Widget.instance('text', function(widgetData) {
   var editor;
   var MIRROR_ELEMENT_CLASS = 'fl-mirror-element';
   var MIRROR_ROOT_CLASS = 'fl-mirror-root';
@@ -11,6 +11,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
   var isInitialized = false;
   var onBlur = false;
   var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
+  var lastSavedHtml;
 
   function cleanUpContent() {
     // Remove any existing markers
@@ -23,7 +24,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
   }
 
   function replaceWidgetInstances($html) {
-    $html.find(WIDGET_INSTANCE_SELECTOR).replaceWith(function () {
+    $html.find(WIDGET_INSTANCE_SELECTOR).replaceWith(function() {
       var widgetInstanceId = $(this).data('id');
 
       return '{{{widget ' + widgetInstanceId + '}}}';
@@ -47,34 +48,48 @@ Fliplet.Widget.instance('text', function (widgetData) {
     // Pass HTML content through a hook so any JavaScript that has changed the HTML
     // can use this to revert the HTML changes
     return Fliplet.Hooks.run('beforeSavePageContent', $replacedHTML.html())
-      .then(function (html) {
+      .then(function(html) {
         if (!Array.isArray(html) || !html.length) {
           html = [$replacedHTML.html()];
         }
 
         return html[html.length - 1];
-      }).then(function (html) {
+      }).then(function(html) {
         data.html = html;
+
+        // Cache HTML for the first time
+        // The first save is always triggered by 'nodeChange' event on focus
+        // so there's no need to save anything
+        if (typeof lastSavedHtml === 'undefined') {
+          lastSavedHtml = data.html;
+        }
+
+        // HTML has not changed. No need to save.
+        if (lastSavedHtml === data.html) {
+          return;
+        }
+
+        lastSavedHtml = data.html;
 
         return Fliplet.Env.get('development')
           ? Promise.resolve()
           : Fliplet.API.request({
-              url: 'v1/widget-instances/' + widgetData.id,
-              method: 'PUT',
-              data: data
-            })
+            url: 'v1/widget-instances/' + widgetData.id,
+            method: 'PUT',
+            data: data
+          });
       })
-      .then(function () {
+      .then(function() {
         Fliplet.Studio.emit('page-preview-send-event', {
           type: 'savePage'
         });
 
-        _.assignIn(widgetData, data)
+        _.assignIn(widgetData, data);
       });
   }
 
   function studioEventHandler() {
-    Fliplet.Studio.onEvent(function (event) {
+    Fliplet.Studio.onEvent(function(event) {
       var eventDetail = event.detail;
 
       if (!editor || !tinymce.activeEditor || editor.id !== tinymce.activeEditor.id) {
@@ -90,12 +105,13 @@ Fliplet.Widget.instance('text', function (widgetData) {
           var cmd = eventDetail.payload.cmd;
           var ui = eventDetail.payload.ui;
           var value = eventDetail.payload.value;
+
           tinymce.activeEditor.execCommand(cmd, ui, value);
 
           break;
         case 'tinymce.applyFormat':
           editor = tinymce.activeEditor;
-          editor.undoManager.transact(function () {
+          editor.undoManager.transact(function() {
             editor.focus();
             editor.formatter.apply(
               eventDetail.payload.format,
@@ -109,7 +125,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
           break;
         case 'tinymce.removeFormat':
           editor = tinymce.activeEditor;
-          editor.undoManager.transact(function () {
+          editor.undoManager.transact(function() {
             editor.focus();
             editor.formatter.remove(
               eventDetail.payload.format,
@@ -131,11 +147,11 @@ Fliplet.Widget.instance('text', function (widgetData) {
         default:
           break;
       }
-    })
+    });
   }
 
   function attachEventHandler() {
-    $WYSIWYG_SELECTOR.on('click', function () {
+    $WYSIWYG_SELECTOR.on('click', function() {
       editor.show();
 
       Fliplet.Widget.updateHighlightDimensions(widgetData.id);
@@ -144,6 +160,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
 
   function initializeEditor() {
     var $element = $WYSIWYG_SELECTOR;
+
     editor = tinymce.get($element.attr('id'));
 
     if (editor) {
@@ -151,7 +168,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
       editor = null;
     }
 
-    return new Promise(function (resolve) {
+    return new Promise(function(resolve) {
       $element.tinymce({
         inline: true,
         menubar: false,
@@ -175,7 +192,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
           thead: 'border-color,width,height,font-size,font-weight,font-style,text-decoration,text-align,color,background,background-color,min-width,max-width,min-height,max-height,border,border-top,border-bottom,border-left,border-right,padding,padding-left,padding-right,padding-top,padding-bottom,padding,margin-left,margin-right,margin-top,margin-bottom,margin',
           tfoot: 'border-color,width,height,font-size,font-weight,font-style,text-decoration,text-align,color,background,background-color,min-width,max-width,min-height,max-height,border,border-top,border-bottom,border-left,border-right,padding,padding-left,padding-right,padding-top,padding-bottom,padding,margin-left,margin-right,margin-top,margin-bottom,margin'
         },
-        valid_children : '+body[style],-font[face],div[br,#text],img,+span[div|section|ul|ol|form|header|footer|article|hr|table]',
+        valid_children: '+body[style],-font[face],div[br,#text],img,+span[div|section|ul|ol|form|header|footer|article|hr|table]',
         toolbar: [
           'formatselect | fontselect fontsizeselect |',
           'bold italic underline strikethrough | forecolor backcolor |',
@@ -184,14 +201,14 @@ Fliplet.Widget.instance('text', function (widgetData) {
           'removeformat'
         ].join(' '),
         fontsize_formats: '8px 10px 12px 14px 16px 18px 24px 36px',
-        setup: function (ed) {
-          ed.on('init', function () {
+        setup: function(ed) {
+          ed.on('init', function() {
             editor = ed;
 
             // Removes position from Editor element.
             // TinyMCE adds the position style to place the toolbar absolute positioned
             // We hide the toolbar and the TinyMCE feature is causing problems
-            $element.attr('style', function (i, style) {
+            $element.attr('style', function(i, style) {
               return style.replace(/position[^;]+;?/g, '');
             });
 
@@ -199,9 +216,9 @@ Fliplet.Widget.instance('text', function (widgetData) {
             Fliplet.Widget.updateHighlightDimensions();
 
             resolve();
-          })
+          });
 
-          ed.on('change', function () {
+          ed.on('change', function() {
             Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
             if (!isInitialized) {
@@ -210,9 +227,9 @@ Fliplet.Widget.instance('text', function (widgetData) {
 
             // Save changes
             debounceSave();
-          })
+          });
 
-          ed.on('keydown', function () {
+          ed.on('input', function() {
             Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
             if (!isInitialized) {
@@ -221,15 +238,15 @@ Fliplet.Widget.instance('text', function (widgetData) {
 
             // Save changes
             debounceSave();
-          })
+          });
 
-          ed.on('focus', function () {
+          ed.on('focus', function() {
             $element.parents('[draggable="true"]').attr('draggable', false);
             Fliplet.Studio.emit('show-toolbar', true);
             Fliplet.Studio.emit('set-wysiwyg-status', true);
-          })
+          });
 
-          ed.on('blur', function () {
+          ed.on('blur', function() {
             onBlur = true;
             $element.parents('[draggable="false"]').attr('draggable', true);
 
@@ -241,12 +258,10 @@ Fliplet.Widget.instance('text', function (widgetData) {
 
             // Save changes
             debounceSave();
-          })
+          });
 
-          ed.on('nodeChange', function (e) {
-            /******************************************************************/
+          ed.on('nodeChange', function(e) {
             /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
-            /******************************************************************/
 
             if (isInitialized) {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
@@ -284,10 +299,10 @@ Fliplet.Widget.instance('text', function (widgetData) {
 
             // Save changes
             debounceSave();
-          })
+          });
         }
-      })
-    })
+      });
+    });
   }
 
   function registerHandlebarsHelpers() {
@@ -320,7 +335,7 @@ Fliplet.Widget.instance('text', function (widgetData) {
     }
 
     initializeEditor()
-      .then(function () {
+      .then(function() {
         isInitialized = true;
         editor.hide();
 
