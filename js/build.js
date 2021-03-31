@@ -6,7 +6,7 @@
     var MIRROR_ELEMENT_CLASS = 'fl-mirror-element';
     var MIRROR_ROOT_CLASS = 'fl-mirror-root';
     var PLACEHOLDER_CLASS = 'fl-text-placeholder';
-    var WYSIWYG_SELECTOR = '.fl-wysiwyg-text.mce-content-body[contenteditable]';
+    var WYSIWYG_SELECTOR = '.fl-wysiwyg-text.mce-content-body';
     var WIDGET_INSTANCE_SELECTOR = '[data-fl-widget-instance]';
     var $WYSIWYG_SELECTOR = $('[data-text-id="' + widgetData.id + '"]');
     var debounceSave = _.debounce(saveChanges, 500);
@@ -337,6 +337,8 @@
       if (!widgetData.html && !$WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
         insertPlaceholder();
       }
+
+      cleanUpContent();
 
       if (mode !== 'interact' && !isDev) {
         return;
