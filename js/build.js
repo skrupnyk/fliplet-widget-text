@@ -43,7 +43,9 @@
       cleanUpContent();
 
       var data = {
-        html: editor.getContent() || widgetData.html
+        html: editor && typeof editor.getContent === 'function'
+          ? editor.getContent()
+          : widgetData.html
       };
 
       onBlur = false;
