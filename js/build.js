@@ -6,7 +6,6 @@
     var MIRROR_ELEMENT_CLASS = 'fl-mirror-element';
     var MIRROR_ROOT_CLASS = 'fl-mirror-root';
     var PLACEHOLDER_CLASS = 'fl-text-placeholder';
-    var WYSIWYG_SELECTOR = '.fl-wysiwyg-text.mce-content-body';
     var WIDGET_INSTANCE_SELECTOR = '[data-fl-widget-instance]';
     var $WYSIWYG_SELECTOR = $('[data-text-id="' + widgetData.id + '"]');
     var debounceSave = _.debounce(saveChanges, 500);
@@ -22,7 +21,7 @@
       $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
       $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
       $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
-      $(WYSIWYG_SELECTOR + ' ' + WYSIWYG_SELECTOR).replaceWith(function() {
+      $('.fl-wysiwyg-text .fl-wysiwyg-text.mce-content-body').replaceWith(function() {
         return $(this).contents();
       });
 
