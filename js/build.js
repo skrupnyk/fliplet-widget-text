@@ -337,10 +337,12 @@
         insertPlaceholder();
       }
 
-      cleanUpContent();
+      if (mode !== 'interact') {
+        cleanUpContent();
 
-      if (mode !== 'interact' && !isDev) {
-        return;
+        if (!isDev) {
+          return;
+        }
       }
 
       initializeEditor()
