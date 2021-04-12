@@ -8,7 +8,7 @@
     var PLACEHOLDER_CLASS = 'fl-text-placeholder';
     var WIDGET_INSTANCE_SELECTOR = '[data-fl-widget-instance]';
     var $WYSIWYG_SELECTOR = $('[data-text-id="' + widgetData.id + '"]');
-    var debounceSave = _.debounce(saveChanges, 500);
+    var debounceSave = _.debounce(saveChanges, 500, { leading: true });
     var mode = Fliplet.Env.get('mode');
     var isDev = Fliplet.Env.get('development');
     var isInitialized = false;
