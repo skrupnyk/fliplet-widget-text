@@ -159,7 +159,9 @@
 
     function attachEventHandler() {
       $WYSIWYG_SELECTOR.on('click', function() {
-        editor.show();
+        initializeEditor().then(function() {
+          editor.show();
+        });
 
         Fliplet.Widget.updateHighlightDimensions(widgetData.id);
       });
@@ -171,9 +173,7 @@
       editor = tinymce.get($element.attr('id'));
 
       if (editor) {
-        delete editors[widgetData.id];
-        editor.remove();
-        editor = null;
+        return Promise.resolve(editor);
       }
 
       return new Promise(function(resolve) {
