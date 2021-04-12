@@ -329,7 +329,7 @@
     function insertPlaceholder() {
       var contentHTML = contentTemplate();
 
-      $WYSIWYG_SELECTOR.append(contentHTML);
+      $WYSIWYG_SELECTOR.html(contentHTML);
     }
 
     function init() {
