@@ -158,12 +158,15 @@
     }
 
     function attachEventHandler() {
-      $WYSIWYG_SELECTOR.on('click', function() {
+      $WYSIWYG_SELECTOR.on('click', function(e) {
         initializeEditor().then(function() {
           editor.show();
         });
 
-        Fliplet.Widget.updateHighlightDimensions(widgetData.id);
+        // Update element highlight if there isn't already an inline element selected
+        if (!$('[data-id="' + widgetData.id + '"] .mce-content-body [data-mce-selected="1"]').length) {
+          Fliplet.Widget.updateHighlightDimensions(widgetData.id);
+        }
       });
     }
 
@@ -272,7 +275,9 @@
             ed.on('nodeChange', function(e) {
               /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
 
-              if (isInitialized) {
+              // Update element highlight if there isn't already an inline element selected
+              if (isInitialized
+                && !$('[data-id="' + widgetData.id + '"] .mce-content-body [data-mce-selected="1"]').length) {
                 Fliplet.Widget.updateHighlightDimensions(widgetData.id);
               }
 
