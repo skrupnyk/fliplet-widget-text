@@ -9,7 +9,7 @@
 }
 
 .mce-content-body *[contentEditable=false][data-mce-selected] {
-  outline: none;
+  outline: none !important;
 }
 
 .fl-wysiwyg-text {
