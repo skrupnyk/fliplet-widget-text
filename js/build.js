@@ -253,12 +253,14 @@
             });
 
             ed.on('focus', function() {
+              debugger;
               $element.parents('[draggable="true"]').attr('draggable', false);
               Fliplet.Studio.emit('show-toolbar', true);
               Fliplet.Studio.emit('set-wysiwyg-status', true);
             });
 
             ed.on('blur', function() {
+              debugger;
               onBlur = true;
               $element.parents('[draggable="false"]').attr('draggable', true);
 
