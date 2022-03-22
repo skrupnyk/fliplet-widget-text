@@ -50,6 +50,7 @@
       };
 
       onBlur = false;
+      onInput = true;
 
       var $html = $('<div>' + data.html + '</div>').clone();
       var $replacedHTML = replaceWidgetInstances($html);
