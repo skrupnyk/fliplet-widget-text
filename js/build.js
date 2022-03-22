@@ -13,6 +13,7 @@
     var isDev = Fliplet.Env.get('development');
     var isInitialized = false;
     var onBlur = false;
+    var onInput = false;
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
 
@@ -242,6 +243,7 @@
             });
 
             ed.on('input', function() {
+              onInput = true;
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
               if (!isInitialized) {
@@ -253,14 +255,20 @@
             });
 
             ed.on('focus', function() {
-              debugger;
+              if (!onInput) {
+                $element.text('');
+              }
+
               $element.parents('[draggable="true"]').attr('draggable', false);
               Fliplet.Studio.emit('show-toolbar', true);
               Fliplet.Studio.emit('set-wysiwyg-status', true);
             });
 
             ed.on('blur', function() {
-              debugger;
+              if (!onInput || !$element.text()) {
+                $element.text('Click here to start typing...');
+              }
+
               onBlur = true;
               $element.parents('[draggable="false"]').attr('draggable', true);
 
