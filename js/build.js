@@ -269,7 +269,7 @@
             });
 
             ed.on('blur', function() {
-              if (!widgetData.html && !$WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
+              if (!$element.text()) {
                 registerHandlebarsHelpers();
                 insertPlaceholder();
               }
