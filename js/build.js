@@ -272,7 +272,8 @@
 
             ed.on('blur', function() {
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
-                $WYSIWYG_SELECTOR.html('<p></p>');
+                console.log($WYSIWYG_SELECTOR);
+                $WYSIWYG_SELECTOR.html('<p><br data-mce-bogus="1"></p>');
                 init();
 
                 return;
