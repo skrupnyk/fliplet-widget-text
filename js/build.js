@@ -271,11 +271,11 @@
 
             ed.on('blur', function() {
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
-                init();
-                $element.find('p').addClass(PLACEHOLDER_CLASS);
-                console.log('2');
-
-                return;
+                setTimeout(function() {
+                  init();
+                  $element.find('p').addClass(PLACEHOLDER_CLASS);
+                  console.log('2');
+                }, 500);
               }
               // console.log(widgetData);
               // if (!widgetData.html) {
