@@ -273,6 +273,7 @@
             ed.on('blur', function() {
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
                 insertPlaceholder();
+                $element.addClass(PLACEHOLDER_CLASS);
 
                 return;
               }
