@@ -17,18 +17,16 @@
     var lastSavedHtml;
 
     function cleanUpContent() {
-      if ($WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
-        // Remove any existing markers
-        $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
-        $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
-        $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
-        $('.fl-wysiwyg-text .fl-wysiwyg-text.mce-content-body').replaceWith(function() {
-          return $(this).contents();
-        });
+      // Remove any existing markers
+      $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
+      $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
+      $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
+      $('.fl-wysiwyg-text .fl-wysiwyg-text.mce-content-body').replaceWith(function() {
+        return $(this).contents();
+      });
 
-        // Remove empty class attributes
-        $('[class=""]').removeAttr('class');
-      }
+      // Remove empty class attributes
+      $('[class=""]').removeAttr('class');
     }
 
     function replaceWidgetInstances($html) {
@@ -247,7 +245,7 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              if (!isInitialized) {
+              if (!isInitialized || !$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
                 return;
               }
 
@@ -259,10 +257,6 @@
               if ($WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
                 $element.text('');
               }
-              // console.log(widgetData);
-              // if (!onInput || !widgetData.html) {
-              //   $element.text('');
-              // }
 
               $element.parents('[draggable="true"]').attr('draggable', false);
               Fliplet.Studio.emit('show-toolbar', true);
@@ -271,16 +265,10 @@
 
             ed.on('blur', function() {
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
-                  init();
-                  $element.find('p').addClass(PLACEHOLDER_CLASS);
-                  console.log('2');
+                init();
 
-                  return;
+                return;
               }
-              // console.log(widgetData);
-              // if (!widgetData.html) {
-              //   $element.text('Click here to start typing...');
-              // }
 
               onBlur = true;
               $element.parents('[draggable="false"]').attr('draggable', true);
