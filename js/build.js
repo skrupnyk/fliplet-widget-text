@@ -269,16 +269,8 @@
             });
 
             ed.on('blur', function() {
-              debugger;
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
-                onBlur = true;
-                $element.parents('[draggable="false"]').attr('draggable', true);
-
-                Fliplet.Studio.emit('set-wysiwyg-status', false);
-                insertPlaceholder();
-                $element.find('p').addClass(PLACEHOLDER_CLASS);
-
-                return;
+                init();
               }
               // console.log(widgetData);
               // if (!widgetData.html) {
