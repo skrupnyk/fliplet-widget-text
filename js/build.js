@@ -12,6 +12,7 @@
     var mode = Fliplet.Env.get('mode');
     var isDev = Fliplet.Env.get('development');
     var isInitialized = false;
+    var onInput = false;
     var onBlur = false;
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
@@ -45,7 +46,10 @@
       var data = {
         html: editor && typeof editor.getContent === 'function'
           ? editor.getContent()
-          : widgetData.html
+          : widgetData.html,
+        onInput: editor && typeof editor.getContent === 'function'
+          ? onInput
+          : widgetData.onInput
       };
 
       onBlur = false;
@@ -244,6 +248,10 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
+              onInput = $WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')
+                ? true
+                : false;
+
               if (!isInitialized) {
                 return;
               }
@@ -253,12 +261,22 @@
             });
 
             ed.on('focus', function() {
+              if ($WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '') && !widgetData.onInput) {
+                $element.text('');
+              }
+
               $element.parents('[draggable="true"]').attr('draggable', false);
               Fliplet.Studio.emit('show-toolbar', true);
               Fliplet.Studio.emit('set-wysiwyg-status', true);
             });
 
             ed.on('blur', function() {
+              if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
+                insertPlaceholder();
+
+                return;
+              }
+
               onBlur = true;
               $element.parents('[draggable="false"]').attr('draggable', true);
 
