@@ -276,6 +276,8 @@
                   $element.find('p').addClass(PLACEHOLDER_CLASS);
                   console.log('2');
                 }, 500);
+
+                return;
               }
               // console.log(widgetData);
               // if (!widgetData.html) {
