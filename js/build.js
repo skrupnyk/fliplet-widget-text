@@ -250,7 +250,9 @@
               }
 
               // Save changes
-              debounceSave();
+              if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
+                debounceSave();
+              }
             });
 
             ed.on('focus', function() {
