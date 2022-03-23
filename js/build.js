@@ -256,7 +256,8 @@
 
             ed.on('focus', function() {
               if (!widgetData.html && $WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
-                console.log($WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS));
+                console.log($WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length);
+                $element.text('');
               }
               // console.log(widgetData);
               // if (!onInput || !widgetData.html) {
