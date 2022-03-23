@@ -272,7 +272,7 @@
 
             ed.on('blur', function() {
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
-                replaceWidgetInstances($('<div><p></p></div>'));
+                $WYSIWYG_SELECTOR.html('<p></p>');
                 init();
 
                 return;
