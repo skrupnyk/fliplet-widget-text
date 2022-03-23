@@ -13,7 +13,7 @@
     var isDev = Fliplet.Env.get('development');
     var isInitialized = false;
     var onBlur = false;
-    var onInput = false;
+    var onInput;
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
 
