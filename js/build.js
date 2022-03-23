@@ -261,9 +261,6 @@
             });
 
             ed.on('focus', function() {
-              console.log($WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, ''));
-              console.log(widgetData.onInput);
-
               if ($WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '') && !widgetData.onInput) {
                 $element.text('');
               }
@@ -274,10 +271,8 @@
             });
 
             ed.on('blur', function() {
-              debugger;
-
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
-                $WYSIWYG_SELECTOR.html('<p></p>');
+                replaceWidgetInstances('<p></p>');
                 init();
 
                 return;
