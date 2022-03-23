@@ -12,6 +12,7 @@
     var mode = Fliplet.Env.get('mode');
     var isDev = Fliplet.Env.get('development');
     var isInitialized = false;
+    var onInput = false;
     var onBlur = false;
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
@@ -40,13 +41,15 @@
     }
 
     function saveChanges() {
-      console.log('1');
       cleanUpContent();
 
       var data = {
         html: editor && typeof editor.getContent === 'function'
           ? editor.getContent()
-          : widgetData.html
+          : widgetData.html,
+        onInput: editor && typeof editor.getContent === 'function'
+          ? onInput
+          : widgetData.onInput
       };
 
       onBlur = false;
@@ -238,8 +241,6 @@
                 return;
               }
 
-              console.log('change');
-
               // Save changes
               debounceSave();
             });
@@ -247,13 +248,11 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
+              onInput = $WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')
+                ? true
+                : false;
+
               if (!isInitialized) {
-                return;
-              }
-
-              if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
-                $element.find('p').addClass(PLACEHOLDER_CLASS);
-
                 return;
               }
 
@@ -262,7 +261,10 @@
             });
 
             ed.on('focus', function() {
-              if ($WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
+              console.log($WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, ''));
+              console.log(widgetData.onInput);
+
+              if ($WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '') && !widgetData.onInput) {
                 $element.text('');
               }
 
@@ -329,8 +331,6 @@
               if (!isInitialized) {
                 return;
               }
-
-              console.log('nodeChange');
 
               // Save changes
               debounceSave();
