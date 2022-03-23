@@ -271,7 +271,7 @@
             ed.on('blur', function() {
               if (!widgetData.html && !$WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
                 registerHandlebarsHelpers();
-                // insertPlaceholder();
+                insertPlaceholder();
               }
               // console.log(widgetData);
               // if (!widgetData.html) {
