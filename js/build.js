@@ -256,6 +256,7 @@
 
             ed.on('focus', function() {
               console.log(onInput);
+              console.log(widgetData.html);
               if (!onInput) {
                 $element.text('');
               }
