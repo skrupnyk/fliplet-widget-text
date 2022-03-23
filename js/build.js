@@ -269,9 +269,7 @@
             });
 
             ed.on('blur', function() {
-              debugger;
-              if (!$(editor).text()) {
-                registerHandlebarsHelpers();
+              if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
                 insertPlaceholder();
                 $element.find('p').addClass(PLACEHOLDER_CLASS);
 
