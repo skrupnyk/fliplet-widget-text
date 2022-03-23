@@ -50,7 +50,6 @@
       };
 
       onBlur = false;
-      onInput = true;
 
       var $html = $('<div>' + data.html + '</div>').clone();
       var $replacedHTML = replaceWidgetInstances($html);
@@ -256,6 +255,7 @@
             });
 
             ed.on('focus', function() {
+              console.log(onInput);
               if (!onInput) {
                 $element.text('');
               }
@@ -266,6 +266,7 @@
             });
 
             ed.on('blur', function() {
+              console.log(onInput);
               if (!onInput || !$element.text()) {
                 $element.text('Click here to start typing...');
               }
