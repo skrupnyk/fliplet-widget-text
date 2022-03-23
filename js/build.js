@@ -269,6 +269,7 @@
             });
 
             ed.on('blur', function() {
+              debugger;
               if (!$element.text()) {
                 registerHandlebarsHelpers();
                 insertPlaceholder();
@@ -340,7 +341,6 @@
 
     function registerHandlebarsHelpers() {
       Handlebars.registerHelper('isInteractable', function(options) {
-        debugger;
         var result = mode === 'interact' || isDev;
 
         if (result === false) {
