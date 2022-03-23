@@ -13,21 +13,22 @@
     var isDev = Fliplet.Env.get('development');
     var isInitialized = false;
     var onBlur = false;
-    var onInput;
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
 
     function cleanUpContent() {
-      // Remove any existing markers
-      $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
-      $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
-      $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
-      $('.fl-wysiwyg-text .fl-wysiwyg-text.mce-content-body').replaceWith(function() {
-        return $(this).contents();
-      });
+      if ($WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
+        // Remove any existing markers
+        $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
+        $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
+        $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
+        $('.fl-wysiwyg-text .fl-wysiwyg-text.mce-content-body').replaceWith(function() {
+          return $(this).contents();
+        });
 
-      // Remove empty class attributes
-      $('[class=""]').removeAttr('class');
+        // Remove empty class attributes
+        $('[class=""]').removeAttr('class');
+      }
     }
 
     function replaceWidgetInstances($html) {
@@ -255,7 +256,6 @@
             });
 
             ed.on('focus', function() {
-              debugger;
               if ($WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
                 $element.text('');
               }
@@ -271,13 +271,11 @@
 
             ed.on('blur', function() {
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
-                setTimeout(function() {
                   init();
                   $element.find('p').addClass(PLACEHOLDER_CLASS);
                   console.log('2');
 
                   return;
-                }, 600);
               }
               // console.log(widgetData);
               // if (!widgetData.html) {
