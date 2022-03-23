@@ -274,6 +274,7 @@
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
                 console.log($WYSIWYG_SELECTOR);
                 $WYSIWYG_SELECTOR.html('<p><br data-mce-bogus="1"></p>');
+                console.log($WYSIWYG_SELECTOR.find('p'));
                 init();
 
                 return;
