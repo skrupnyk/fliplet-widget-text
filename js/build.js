@@ -270,7 +270,7 @@
 
             ed.on('blur', function() {
               if (!$element.text()) {
-                registerHandlebarsHelpers();
+                debugger;
                 insertPlaceholder();
                 $element.find('p').addClass(PLACEHOLDER_CLASS);
 
