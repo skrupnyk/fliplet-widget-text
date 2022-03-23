@@ -251,6 +251,8 @@
 
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
                 $element.find('p').addClass(PLACEHOLDER_CLASS);
+
+                return;
               }
 
               // Save changes
