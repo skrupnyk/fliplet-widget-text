@@ -13,6 +13,7 @@
     var isDev = Fliplet.Env.get('development');
     var isInitialized = false;
     var onBlur = false;
+    var onInput;
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
 
@@ -242,6 +243,7 @@
             });
 
             ed.on('input', function() {
+              onInput = true;
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
               if (!isInitialized) {
@@ -253,7 +255,8 @@
             });
 
             ed.on('focus', function() {
-              if (!widgetData.html) {
+              console.log(widgetData);
+              if (!onInput || !widgetData.html) {
                 $element.text('');
               }
 
@@ -263,6 +266,7 @@
             });
 
             ed.on('blur', function() {
+              console.log(widgetData);
               if (!widgetData.html) {
                 $element.text('Click here to start typing...');
               }
