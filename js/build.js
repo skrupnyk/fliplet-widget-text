@@ -41,6 +41,7 @@
     }
 
     function saveChanges() {
+      console.log('1');
       cleanUpContent();
 
       var data = {
@@ -250,9 +251,7 @@
               }
 
               // Save changes
-              if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
-                debounceSave();
-              }
+              debounceSave();
             });
 
             ed.on('focus', function() {
@@ -274,6 +273,7 @@
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
                 init();
                 $element.find('p').addClass(PLACEHOLDER_CLASS);
+                console.log('2');
 
                 return;
               }
