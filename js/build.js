@@ -243,7 +243,6 @@
             });
 
             ed.on('input', function() {
-              onInput = true;
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
               if (!isInitialized) {
@@ -271,7 +270,8 @@
 
             ed.on('blur', function() {
               if (!widgetData.html && !$WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
-                insertPlaceholder();
+                registerHandlebarsHelpers();
+                // insertPlaceholder();
               }
               // console.log(widgetData);
               // if (!widgetData.html) {
