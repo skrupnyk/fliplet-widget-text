@@ -272,6 +272,7 @@
 
             ed.on('blur', function() {
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
+                registerHandlebarsHelpers();
                 insertPlaceholder();
                 debugger;
 
