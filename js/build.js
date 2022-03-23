@@ -270,7 +270,7 @@
 
             ed.on('blur', function() {
               debugger;
-              if (!$WYSIWYG_SELECTOR.text()) {
+              if (!$(editor).text()) {
                 insertPlaceholder();
                 $element.find('p').addClass(PLACEHOLDER_CLASS);
 
