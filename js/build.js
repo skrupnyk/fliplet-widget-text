@@ -255,7 +255,6 @@
 
             ed.on('focus', function() {
               if ($WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
-                console.log($WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length);
                 $element.text('');
               }
               // console.log(widgetData);
@@ -270,6 +269,11 @@
 
             ed.on('blur', function() {
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
+                onBlur = true;
+                $element.parents('[draggable="false"]').attr('draggable', true);
+
+                Fliplet.Studio.emit('set-wysiwyg-status', false);
+                registerHandlebarsHelpers();
                 insertPlaceholder();
                 $element.find('p').addClass(PLACEHOLDER_CLASS);
 
