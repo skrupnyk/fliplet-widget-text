@@ -273,7 +273,6 @@
                 $element.parents('[draggable="false"]').attr('draggable', true);
 
                 Fliplet.Studio.emit('set-wysiwyg-status', false);
-                registerHandlebarsHelpers();
                 insertPlaceholder();
                 $element.find('p').addClass(PLACEHOLDER_CLASS);
 
