@@ -254,6 +254,7 @@
             });
 
             ed.on('focus', function() {
+              debugger;
               if ($WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
                 $element.text('');
               }
@@ -268,6 +269,7 @@
             });
 
             ed.on('blur', function() {
+              debugger;
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
                 onBlur = true;
                 $element.parents('[draggable="false"]').attr('draggable', true);
