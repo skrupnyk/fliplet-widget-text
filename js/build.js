@@ -269,10 +269,12 @@
             });
 
             ed.on('blur', function() {
-              debugger;
               if (!$element.text()) {
                 registerHandlebarsHelpers();
                 insertPlaceholder();
+                $element.find('p').addClass(PLACEHOLDER_CLASS);
+
+                return;
               }
               // console.log(widgetData);
               // if (!widgetData.html) {
