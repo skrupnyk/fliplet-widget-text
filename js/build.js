@@ -255,10 +255,13 @@
             });
 
             ed.on('focus', function() {
-              console.log(widgetData);
-              if (!onInput || !widgetData.html) {
-                $element.text('');
+              if (!widgetData.html && $WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
+                console.log($WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS));
               }
+              // console.log(widgetData);
+              // if (!onInput || !widgetData.html) {
+              //   $element.text('');
+              // }
 
               $element.parents('[draggable="true"]').attr('draggable', false);
               Fliplet.Studio.emit('show-toolbar', true);
@@ -266,10 +269,13 @@
             });
 
             ed.on('blur', function() {
-              console.log(widgetData);
-              if (!widgetData.html) {
-                $element.text('Click here to start typing...');
+              if (!widgetData.html && !$WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
+                insertPlaceholder();
               }
+              // console.log(widgetData);
+              // if (!widgetData.html) {
+              //   $element.text('Click here to start typing...');
+              // }
 
               onBlur = true;
               $element.parents('[draggable="false"]').attr('draggable', true);
