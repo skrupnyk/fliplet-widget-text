@@ -238,6 +238,8 @@
                 return;
               }
 
+              console.log('change');
+
               // Save changes
               debounceSave();
             });
@@ -327,6 +329,8 @@
               if (!isInitialized) {
                 return;
               }
+
+              console.log('nodeChange');
 
               // Save changes
               debounceSave();
