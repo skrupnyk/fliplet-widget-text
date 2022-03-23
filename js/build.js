@@ -269,7 +269,7 @@
             });
 
             ed.on('blur', function() {
-              if (!$element.text()) {
+              if (!$WYSIWYG_SELECTOR.text()) {
                 debugger;
                 insertPlaceholder();
                 $element.find('p').addClass(PLACEHOLDER_CLASS);
