@@ -275,9 +275,9 @@
                   init();
                   $element.find('p').addClass(PLACEHOLDER_CLASS);
                   console.log('2');
-                }, 500);
 
-                return;
+                  return;
+                }, 600);
               }
               // console.log(widgetData);
               // if (!widgetData.html) {
