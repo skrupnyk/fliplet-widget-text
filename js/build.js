@@ -274,6 +274,7 @@
             });
 
             ed.on('blur', function() {
+              debugger;
               if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
                 init();
 
