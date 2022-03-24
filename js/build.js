@@ -249,7 +249,7 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              hasValue = elementValue ? true : false;
+              hasValue = !!elementValue;
 
               if (!isInitialized) {
                 return;
@@ -270,6 +270,7 @@
             });
 
             ed.on('blur', function() {
+              debugger;
               if (!elementValue) {
                 insertPlaceholder();
 
