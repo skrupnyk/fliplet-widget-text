@@ -176,7 +176,7 @@
 
     function initializeEditor() {
       var $element = $WYSIWYG_SELECTOR;
-      var value = $WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '');
+      var elementValue = $element.text().replace(/[\r\n]+/g, '');
 
       editor = tinymce.get($element.attr('id'));
 
@@ -249,7 +249,7 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              hasValue = !!value;
+              hasValue = !!elementValue;
 
               if (!isInitialized) {
                 return;
@@ -260,7 +260,7 @@
             });
 
             ed.on('focus', function() {
-              if (value && !widgetData.hasValue) {
+              if (elementValue && !widgetData.hasValue) {
                 $element.text('');
               }
 
@@ -271,7 +271,7 @@
 
             ed.on('blur', function() {
               debugger;
-              if (!value) {
+              if (!elementValue) {
                 insertPlaceholder();
 
                 return;
