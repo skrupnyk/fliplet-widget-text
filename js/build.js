@@ -277,6 +277,7 @@
 
               if (!value) {
                 insertPlaceholder();
+                hasValue = false;
 
                 return;
               }
