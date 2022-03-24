@@ -271,7 +271,7 @@
 
             ed.on('blur', function() {
               debugger;
-              if (!value) {
+              if (!value.trim()) {
                 insertPlaceholder();
 
                 return;
