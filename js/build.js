@@ -8,6 +8,7 @@
     var PLACEHOLDER_CLASS = 'fl-text-placeholder';
     var WIDGET_INSTANCE_SELECTOR = '[data-fl-widget-instance]';
     var $WYSIWYG_SELECTOR = $('[data-text-id="' + widgetData.id + '"]');
+    var value = $WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '');
     var debounceSave = _.debounce(saveChanges, 500, { leading: true });
     var mode = Fliplet.Env.get('mode');
     var isDev = Fliplet.Env.get('development');
@@ -176,7 +177,6 @@
 
     function initializeEditor() {
       var $element = $WYSIWYG_SELECTOR;
-      var elementValue = $element.text().replace(/[\r\n]+/g, '');
 
       editor = tinymce.get($element.attr('id'));
 
@@ -249,7 +249,7 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              hasValue = !!elementValue;
+              hasValue = !!value;
 
               if (!isInitialized) {
                 return;
@@ -260,7 +260,7 @@
             });
 
             ed.on('focus', function() {
-              if (elementValue && !widgetData.hasValue) {
+              if (value && !widgetData.hasValue) {
                 $element.text('');
               }
 
@@ -271,7 +271,7 @@
 
             ed.on('blur', function() {
               debugger;
-              if (!elementValue) {
+              if (!value) {
                 insertPlaceholder();
 
                 return;
