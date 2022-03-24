@@ -249,7 +249,7 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              hasValue = value ? true : false;
+              hasValue = !!value;
 
               if (!isInitialized) {
                 return;
