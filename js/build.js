@@ -237,12 +237,6 @@
             ed.on('change', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              var value = $element.text().trim().replace(/[\r\n]+/g, '');
-
-              hasValue = !!value;
-
-              console.log('change');
-
               if (!isInitialized) {
                 return;
               }
@@ -257,9 +251,6 @@
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
               hasValue = !!value;
-
-              console.log('input');
-              console.log(hasValue);
 
               if (!isInitialized) {
                 return;
@@ -276,8 +267,6 @@
                 $element.text('');
               }
 
-              console.log('focus');
-
               $element.parents('[draggable="true"]').attr('draggable', false);
               Fliplet.Studio.emit('show-toolbar', true);
               Fliplet.Studio.emit('set-wysiwyg-status', true);
@@ -286,10 +275,9 @@
             ed.on('blur', function() {
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
-              console.log('blur');
-
               if (!value) {
                 insertPlaceholder();
+                hasValue = false;
 
                 return;
               }
