@@ -235,10 +235,10 @@
               resolve();
             });
 
-            ed.on('change', function() {
+            ed.on('change', function(event) {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              value = value;
+              value = $(event.target).text().trim().replace(/[\r\n]+/g, '');
 
               if (!isInitialized) {
                 return;
