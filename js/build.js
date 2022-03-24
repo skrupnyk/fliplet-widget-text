@@ -12,7 +12,7 @@
     var mode = Fliplet.Env.get('mode');
     var isDev = Fliplet.Env.get('development');
     var isInitialized = false;
-    var onInput = false;
+    var isInputted = false;
     var onBlur = false;
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
@@ -47,9 +47,9 @@
         html: editor && typeof editor.getContent === 'function'
           ? editor.getContent()
           : widgetData.html,
-        onInput: editor && typeof editor.getContent === 'function'
-          ? onInput
-          : widgetData.onInput
+        isInputted: editor && typeof editor.getContent === 'function'
+          ? isInputted
+          : widgetData.isInputted
       };
 
       onBlur = false;
@@ -176,6 +176,7 @@
 
     function initializeEditor() {
       var $element = $WYSIWYG_SELECTOR;
+      var elementValue = $WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '');
 
       editor = tinymce.get($element.attr('id'));
 
@@ -248,9 +249,7 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              onInput = $WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')
-                ? true
-                : false;
+              isInputted = elementValue ? true : false;
 
               if (!isInitialized) {
                 return;
@@ -261,7 +260,7 @@
             });
 
             ed.on('focus', function() {
-              if ($WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '') && !widgetData.onInput) {
+              if (elementValue && !widgetData.isInputted) {
                 $element.text('');
               }
 
@@ -271,7 +270,7 @@
             });
 
             ed.on('blur', function() {
-              if (!$WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '')) {
+              if (!elementValue) {
                 insertPlaceholder();
 
                 return;
