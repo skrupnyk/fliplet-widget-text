@@ -248,7 +248,9 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              hasValue = !!elementValue;
+              var value = $element.text().trim().replace(/[\r\n]+/g, '');
+
+              hasValue = !!value;
 
               if (!isInitialized) {
                 return;
