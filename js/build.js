@@ -162,7 +162,7 @@
     }
 
     function attachEventHandler() {
-      $WYSIWYG_SELECTOR.on('click', function(e) {
+      $WYSIWYG_SELECTOR.on('click', function() {
         initializeEditor().then(function() {
           editor.show();
         });
