@@ -258,9 +258,10 @@
               debounceSave();
             });
 
-            ed.on('focus', function(event) {
-              console.log(event);
-              if (event.target.value && !widgetData.hasValue) {
+            ed.on('focus', function() {
+              var value = $element.text().trim().replace(/[\r\n]+/g, '');
+
+              if (value && !widgetData.hasValue) {
                 $element.text('');
               }
 
@@ -269,9 +270,10 @@
               Fliplet.Studio.emit('set-wysiwyg-status', true);
             });
 
-            ed.on('blur', function(event) {
-              console.log(event);
-              if (!event.target.value.trim()) {
+            ed.on('blur', function() {
+              var value = $element.text().trim().replace(/[\r\n]+/g, '');
+
+              if (!value) {
                 insertPlaceholder();
 
                 return;
