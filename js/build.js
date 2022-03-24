@@ -12,7 +12,7 @@
     var mode = Fliplet.Env.get('mode');
     var isDev = Fliplet.Env.get('development');
     var isInitialized = false;
-    var isInputted = false;
+    var hasValue = false;
     var onBlur = false;
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
@@ -47,9 +47,9 @@
         html: editor && typeof editor.getContent === 'function'
           ? editor.getContent()
           : widgetData.html,
-        isInputted: editor && typeof editor.getContent === 'function'
-          ? isInputted
-          : widgetData.isInputted
+        hasValue: editor && typeof editor.getContent === 'function'
+          ? hasValue
+          : widgetData.hasValue
       };
 
       onBlur = false;
@@ -176,7 +176,7 @@
 
     function initializeEditor() {
       var $element = $WYSIWYG_SELECTOR;
-      var elementValue = $WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '');
+      var value = $element.text().replace(/[\r\n]+/g, '');
 
       editor = tinymce.get($element.attr('id'));
 
@@ -249,7 +249,7 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              isInputted = elementValue ? true : false;
+              hasValue = value ? true : false;
 
               if (!isInitialized) {
                 return;
@@ -260,7 +260,7 @@
             });
 
             ed.on('focus', function() {
-              if (elementValue && !widgetData.isInputted) {
+              if (value && !widgetData.hasValue) {
                 $element.text('');
               }
 
@@ -270,7 +270,7 @@
             });
 
             ed.on('blur', function() {
-              if (!elementValue) {
+              if (!value) {
                 insertPlaceholder();
 
                 return;
