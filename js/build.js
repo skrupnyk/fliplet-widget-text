@@ -8,7 +8,6 @@
     var PLACEHOLDER_CLASS = 'fl-text-placeholder';
     var WIDGET_INSTANCE_SELECTOR = '[data-fl-widget-instance]';
     var $WYSIWYG_SELECTOR = $('[data-text-id="' + widgetData.id + '"]');
-    var value = $WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '');
     var debounceSave = _.debounce(saveChanges, 500, { leading: true });
     var mode = Fliplet.Env.get('mode');
     var isDev = Fliplet.Env.get('development');
@@ -177,6 +176,7 @@
 
     function initializeEditor() {
       var $element = $WYSIWYG_SELECTOR;
+      var value = $WYSIWYG_SELECTOR.text().replace(/[\r\n]+/g, '');
 
       editor = tinymce.get($element.attr('id'));
 
@@ -271,7 +271,7 @@
 
             ed.on('blur', function() {
               debugger;
-              if (!value.trim()) {
+              if (!value) {
                 insertPlaceholder();
 
                 return;
