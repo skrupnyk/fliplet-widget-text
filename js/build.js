@@ -12,6 +12,7 @@
     var mode = Fliplet.Env.get('mode');
     var isDev = Fliplet.Env.get('development');
     var isInitialized = false;
+    var hasValue = false;
     var onBlur = false;
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
@@ -45,7 +46,10 @@
       var data = {
         html: editor && typeof editor.getContent === 'function'
           ? editor.getContent()
-          : widgetData.html
+          : widgetData.html,
+        hasValue: editor && typeof editor.getContent === 'function'
+          ? hasValue
+          : widgetData.hasValue
       };
 
       onBlur = false;
@@ -158,7 +162,7 @@
     }
 
     function attachEventHandler() {
-      $WYSIWYG_SELECTOR.on('click', function(e) {
+      $WYSIWYG_SELECTOR.on('click', function() {
         initializeEditor().then(function() {
           editor.show();
         });
@@ -244,6 +248,10 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
+              var value = $element.text().trim().replace(/[\r\n]+/g, '');
+
+              hasValue = !!value;
+
               if (!isInitialized) {
                 return;
               }
@@ -253,12 +261,27 @@
             });
 
             ed.on('focus', function() {
+              var value = $element.text().trim().replace(/[\r\n]+/g, '');
+
+              if (value && !widgetData.hasValue) {
+                $element.text('');
+              }
+
               $element.parents('[draggable="true"]').attr('draggable', false);
               Fliplet.Studio.emit('show-toolbar', true);
               Fliplet.Studio.emit('set-wysiwyg-status', true);
             });
 
             ed.on('blur', function() {
+              var value = $element.text().trim().replace(/[\r\n]+/g, '');
+
+              if (!value) {
+                insertPlaceholder();
+                hasValue = false;
+
+                return;
+              }
+
               onBlur = true;
               $element.parents('[draggable="false"]').attr('draggable', true);
 
