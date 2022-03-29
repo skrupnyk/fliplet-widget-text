@@ -270,7 +270,7 @@
 
               console.log(hasValue, !!widgetData.hasValue);
 
-              if (!widgetData.hasValue) {
+              if (!hasValue && !widgetData.hasValue) {
                 $element.text('');
               }
 
