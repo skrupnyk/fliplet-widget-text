@@ -12,7 +12,7 @@
     var mode = Fliplet.Env.get('mode');
     var isDev = Fliplet.Env.get('development');
     var isInitialized = false;
-    var hasValue = !!widgetData.html;
+    var hasValue = false;
     var onBlur = false;
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
@@ -269,7 +269,7 @@
 
               console.log(hasValue, !!widgetData.hasValue);
 
-              if (value && !widgetData.hasValue) {
+              if (!widgetData.hasValue) {
                 $element.text('');
               }
 
