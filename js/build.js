@@ -280,6 +280,7 @@
               if (!value) {
                 insertPlaceholder();
                 hasValue = false;
+                console.log($element, ed);
                 debugger;
 
                 return;
