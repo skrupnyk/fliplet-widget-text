@@ -12,7 +12,7 @@
     var mode = Fliplet.Env.get('mode');
     var isDev = Fliplet.Env.get('development');
     var isInitialized = false;
-    var hasValue = false;
+    var hasValue = !!widgetData.html;
     var onBlur = false;
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
@@ -263,9 +263,7 @@
             ed.on('focus', function() {
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
-              console.log(widgetData);
-
-              if (value && !widgetData.html && !widgetData.hasValue) {
+              if (value && !widgetData.hasValue) {
                 $element.text('');
               }
 
@@ -280,8 +278,6 @@
               if (!value) {
                 insertPlaceholder();
                 hasValue = false;
-                console.log($element, ed);
-                debugger;
 
                 return;
               }
