@@ -17,7 +17,7 @@
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
 
-    console.log(hasValue);
+    console.log(hasValue, widgetData.hasValue);
 
     function cleanUpContent() {
       // Remove any existing markers
