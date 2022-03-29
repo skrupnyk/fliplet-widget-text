@@ -265,7 +265,7 @@
 
               console.log(widgetData);
 
-              if (value && !widgetData.hasValue && $WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
+              if (value || $WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length && !widgetData.hasValue) {
                 $element.text('');
               }
 
