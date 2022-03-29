@@ -17,7 +17,7 @@
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
 
-    debugger;
+    console.log(hasValue);
 
     function cleanUpContent() {
       // Remove any existing markers
@@ -254,6 +254,8 @@
 
               hasValue = !!value;
 
+              console.log(hasValue);
+
               if (!isInitialized) {
                 return;
               }
@@ -264,6 +266,8 @@
 
             ed.on('focus', function() {
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
+
+              console.log(hasValue, !!widgetData.hasValue);
 
               if (value && !widgetData.hasValue) {
                 $element.text('');
@@ -276,6 +280,8 @@
 
             ed.on('blur', function() {
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
+
+              console.log(hasValue, !!widgetData.hasValue);
 
               if (!value) {
                 insertPlaceholder();
