@@ -263,7 +263,7 @@
             ed.on('focus', function() {
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
-              if (value && !widgetData.hasValue) {
+              if (value && !widgetData.hasValue && $WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
                 $element.text('');
               }
 
