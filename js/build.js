@@ -279,8 +279,8 @@
 
               if (!value) {
                 insertPlaceholder();
-                registerHandlebarsHelpers();
                 hasValue = false;
+                debugger;
 
                 return;
               }
