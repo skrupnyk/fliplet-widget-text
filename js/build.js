@@ -263,7 +263,9 @@
             ed.on('focus', function() {
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
-              if (value && !widgetData.hasValue) {
+              console.log(widgetData);
+
+              if (value && !widgetData.hasValue && $WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
                 $element.text('');
               }
 
@@ -277,6 +279,7 @@
 
               if (!value) {
                 insertPlaceholder();
+                registerHandlebarsHelpers();
                 hasValue = false;
 
                 return;
