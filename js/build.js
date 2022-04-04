@@ -242,13 +242,9 @@
               }
 
               // Save changes
-              if (!hasValue) {
-                insertPlaceholder();
-
-                return;
+              if (hasValue) {
+                debounceSave();
               }
-
-              debounceSave();
             });
 
             ed.on('input', function() {
