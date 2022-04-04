@@ -241,6 +241,7 @@
 
               if (!hasValue && value) {
                 registerHandlebarsHelpers();
+                insertPlaceholder();
 
                 return;
               }
