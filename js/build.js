@@ -21,7 +21,7 @@
       // Remove any existing markers
       $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
       $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
-      $('.' + PLACEHOLDER_CLASS).toggleClass(PLACEHOLDER_CLASS, !hasValue);
+      $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
       $('.fl-wysiwyg-text .fl-wysiwyg-text.mce-content-body').replaceWith(function() {
         return $(this).contents();
       });
