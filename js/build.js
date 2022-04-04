@@ -241,6 +241,12 @@
                 return;
               }
 
+              if (!hasValue) {
+                init();
+
+                return;
+              }
+
               // Save changes
               debounceSave();
             });
@@ -251,12 +257,6 @@
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
               hasValue = !!value;
-
-              if (!hasValue) {
-                init();
-
-                return;
-              }
 
               if (!isInitialized) {
                 return;
