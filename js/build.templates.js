@@ -3,9 +3,9 @@ this["Fliplet"]["Widget"] = this["Fliplet"]["Widget"] || {};
 this["Fliplet"]["Widget"]["Templates"] = this["Fliplet"]["Widget"]["Templates"] || {};
 
 this["Fliplet"]["Widget"]["Templates"]["templates.build.content"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
-    return "  <p class=\"fl-text-placeholder qqq\">Click here to start typing...</p>\r\n  <script>\r\n    console.log('first')\r\n  </script>\r\n";
+    return "  <p class=\"fl-text-placeholder\">Click here to start typing...</p>\r\n";
 },"3":function(container,depth0,helpers,partials,data) {
-    return "  <p class=\"qqq\">&nbsp;</p>\r\n  <script>\r\n    console.log('second')\r\n  </script>\r\n";
+    return "  <p>&nbsp;</p>\r\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, options, buffer = "";
 
