@@ -255,8 +255,6 @@
 
               hasValue = !!value;
 
-              console.log(hasValue);
-
               if (!isInitialized) {
                 return;
               }
@@ -266,10 +264,6 @@
             });
 
             ed.on('focus', function() {
-              var value = $element.text().trim().replace(/[\r\n]+/g, '');
-
-              console.log(hasValue, !!widgetData.hasValue);
-
               if (!hasValue && !widgetData.hasValue) {
                 $element.text('');
               }
@@ -282,10 +276,9 @@
             ed.on('blur', function() {
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
-              console.log(hasValue, !!widgetData.hasValue);
-
               if (!value) {
-                insertPlaceholder();
+                //insertPlaceholder();
+                init();
                 hasValue = false;
 
                 return;
