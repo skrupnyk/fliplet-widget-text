@@ -252,18 +252,12 @@
 
               hasValue = !!value;
 
-              console.log(hasValue);
-
-              if (!hasValue) {
-                return;
-              }
-
               if (!isInitialized) {
                 return;
               }
 
               // Save changes
-              debounceSave();
+              //debounceSave();
             });
 
             ed.on('focus', function() {
