@@ -254,6 +254,8 @@
 
               if (!hasValue) {
                 init();
+
+                return;
               }
 
               if (!isInitialized) {
