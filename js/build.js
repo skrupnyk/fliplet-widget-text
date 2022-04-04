@@ -267,6 +267,7 @@
             });
 
             ed.on('focus', function() {
+              debugger;
               if (!hasValue && !widgetData.hasValue) {
                 $element.text('');
               }
