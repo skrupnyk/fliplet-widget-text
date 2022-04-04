@@ -274,8 +274,8 @@
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
               if (!value) {
-                hasValue = false;
                 insertPlaceholder();
+                hasValue = false;
 
                 return;
               }
