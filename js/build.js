@@ -250,9 +250,13 @@
 
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
-              console.log(value);
-
               hasValue = !!value;
+
+              console.log(hasValue);
+
+              if (!hasValue) {
+                return;
+              }
 
               if (!isInitialized) {
                 return;
