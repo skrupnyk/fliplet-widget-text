@@ -235,6 +235,7 @@
             });
 
             ed.on('change', function() {
+              debugger;
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
@@ -279,6 +280,7 @@
             });
 
             ed.on('blur', function() {
+              debugger;
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
               if (!value) {
