@@ -278,6 +278,7 @@
               if (!value) {
                 hasValue = false;
                 insertPlaceholder();
+                debugger;
 
                 return;
               }
