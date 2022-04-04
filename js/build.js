@@ -237,11 +237,6 @@
             ed.on('change', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              var value = $element.text().trim().replace(/[\r\n]+/g, '');
-
-              console.log(value);
-              debugger;
-
               if (!isInitialized) {
                 return;
               }
@@ -266,8 +261,6 @@
             });
 
             ed.on('focus', function() {
-              console.log(hasValue, widgetData.hasValue);
-
               if (!hasValue && !widgetData.hasValue) {
                 $element.text('');
               }
@@ -283,7 +276,6 @@
               if (!value) {
                 hasValue = false;
                 insertPlaceholder();
-                debugger;
 
                 return;
               }
