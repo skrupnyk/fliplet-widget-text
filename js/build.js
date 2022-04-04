@@ -17,13 +17,11 @@
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
 
-    console.log(Fliplet.Env.get('interface'));
-
     function cleanUpContent() {
       // Remove any existing markers
       $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
       $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
-      $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
+      //$('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
       $('.fl-wysiwyg-text .fl-wysiwyg-text.mce-content-body').replaceWith(function() {
         return $(this).contents();
       });
