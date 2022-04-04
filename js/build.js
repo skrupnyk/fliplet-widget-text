@@ -250,6 +250,8 @@
 
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
+              console.log(value);
+
               hasValue = !!value;
 
               if (!isInitialized) {
@@ -276,6 +278,8 @@
               if (!value) {
                 insertPlaceholder();
                 hasValue = false;
+
+                return;
               }
 
               onBlur = true;
