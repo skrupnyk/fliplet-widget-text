@@ -240,6 +240,7 @@
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
               console.log(value);
+              debugger;
 
               if (!isInitialized) {
                 return;
