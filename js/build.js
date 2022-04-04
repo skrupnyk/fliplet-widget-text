@@ -242,6 +242,12 @@
               }
 
               // Save changes
+              if (!hasValue) {
+                insertPlaceholder();
+
+                return;
+              }
+
               debounceSave();
             });
 
