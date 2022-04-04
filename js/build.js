@@ -239,7 +239,7 @@
 
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
-              if (!hasValue && value) {
+              if (!hasValue) {
                 return;
               }
 
