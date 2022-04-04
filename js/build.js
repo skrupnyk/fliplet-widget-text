@@ -276,9 +276,6 @@
               if (!value) {
                 insertPlaceholder();
                 hasValue = false;
-                widgetData.hasValue = false;
-
-                return;
               }
 
               onBlur = true;
