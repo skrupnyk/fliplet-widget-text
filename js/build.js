@@ -274,7 +274,6 @@
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
               if (!value) {
-                registerHandlebarsHelpers();
                 insertPlaceholder();
                 hasValue = false;
 
