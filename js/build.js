@@ -257,10 +257,12 @@
               }
 
               // Save changes
-              //debounceSave();
+              debounceSave();
             });
 
             ed.on('focus', function() {
+              console.log(!hasValue, !widgetData.hasValue);
+
               if (!hasValue && !widgetData.hasValue) {
                 $element.text('');
               }
