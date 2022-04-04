@@ -237,13 +237,15 @@
             ed.on('change', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              if (!isInitialized) {
+              var value = $element.text().trim().replace(/[\r\n]+/g, '');
+
+              if (!hasValue && value) {
+                insertPlaceholder();
+
                 return;
               }
 
-              if (!hasValue) {
-                init();
-
+              if (!isInitialized) {
                 return;
               }
 
