@@ -17,6 +17,8 @@
     var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
 
+    console.log(Fliplet.Env.get('interface'));
+
     function cleanUpContent() {
       // Remove any existing markers
       $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
@@ -242,9 +244,7 @@
               }
 
               // Save changes
-              if (hasValue) {
-                debounceSave();
-              }
+              debounceSave();
             });
 
             ed.on('input', function() {
