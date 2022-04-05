@@ -300,9 +300,6 @@
             });
 
             ed.on('nodeChange', function(e) {
-              if (!hasValue) {
-                return;
-              }
               /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
 
               // Update element highlight if there isn't already an inline element selected
@@ -320,6 +317,10 @@
 
               var fontFamily = window.getComputedStyle(e.element).getPropertyValue('font-family');
               var fontSize = window.getComputedStyle(e.element).getPropertyValue('font-size');
+
+              if (!hasValue) {
+                return;
+              }
 
               // Send content to Studio
               Fliplet.Studio.emit('tinymce', {
