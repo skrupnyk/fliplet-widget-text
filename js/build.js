@@ -237,12 +237,6 @@
             ed.on('change', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              var value = $element.text().trim().replace(/[\r\n]+/g, '');
-
-              if (!hasValue && value) {
-                return;
-              }
-
               if (!isInitialized) {
                 return;
               }
@@ -317,10 +311,6 @@
 
               var fontFamily = window.getComputedStyle(e.element).getPropertyValue('font-family');
               var fontSize = window.getComputedStyle(e.element).getPropertyValue('font-size');
-
-              if (!hasValue) {
-                return;
-              }
 
               // Send content to Studio
               Fliplet.Studio.emit('tinymce', {
