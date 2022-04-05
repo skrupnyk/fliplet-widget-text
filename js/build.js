@@ -237,6 +237,12 @@
             ed.on('change', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
+              var value = $element.text().trim().replace(/[\r\n]+/g, '');
+
+              if (!hasValue) {
+                return;
+              }
+
               if (!isInitialized) {
                 return;
               }
@@ -261,7 +267,7 @@
             });
 
             ed.on('focus', function() {
-              if (!hasValue && !widgetData.hasValue) {
+              if (!hasValue) {
                 $element.text('');
               }
 
@@ -294,6 +300,10 @@
             });
 
             ed.on('nodeChange', function(e) {
+              if (!hasValue) {
+                return;
+              }
+
               /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
 
               // Update element highlight if there isn't already an inline element selected
