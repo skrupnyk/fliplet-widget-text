@@ -237,8 +237,6 @@
             ed.on('change', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              var value = $element.text().trim().replace(/[\r\n]+/g, '');
-
               if (!hasValue) {
                 return;
               }
