@@ -237,11 +237,7 @@
             ed.on('change', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              if (!hasValue) {
-                return;
-              }
-
-              if (!isInitialized) {
+              if (!hasValue || !isInitialized) {
                 return;
               }
 
