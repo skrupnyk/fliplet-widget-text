@@ -21,11 +21,9 @@
       // Remove any existing markers
       $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
       $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
-      if (!hasValue) {
-        $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
-      }
-      // $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
+      $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
       $('.fl-wysiwyg-text .fl-wysiwyg-text.mce-content-body').replaceWith(function() {
+        debugger;
         return $(this).contents();
       });
 
