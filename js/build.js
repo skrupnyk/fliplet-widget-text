@@ -237,7 +237,7 @@
             ed.on('change', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              var value = $element.text().trim().replace(/[\r\n]+/g, '');
+              console.log(hasValue);
 
               if (!hasValue) {
                 return;
@@ -257,6 +257,8 @@
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
               hasValue = !!value;
+
+              console.log(hasValue);
 
               if (!isInitialized) {
                 return;
@@ -285,6 +287,8 @@
 
                 return;
               }
+
+              console.log(hasValue);
 
               onBlur = true;
               $element.parents('[draggable="false"]').attr('draggable', true);
