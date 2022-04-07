@@ -239,9 +239,9 @@
 
               console.log(hasValue);
 
-              if (!hasValue) {
-                return;
-              }
+              // if (!hasValue) {
+              //   return;
+              // }
 
               if (!isInitialized) {
                 return;
@@ -322,9 +322,9 @@
               var fontFamily = window.getComputedStyle(e.element).getPropertyValue('font-family');
               var fontSize = window.getComputedStyle(e.element).getPropertyValue('font-size');
 
-              if (!hasValue) {
-                return;
-              }
+              // if (!hasValue) {
+              //   return;
+              // }
 
               // Send content to Studio
               Fliplet.Studio.emit('tinymce', {
