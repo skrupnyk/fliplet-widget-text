@@ -342,6 +342,10 @@
                 return;
               }
 
+              var value = $element.text().trim().replace(/[\r\n]+/g, '');
+
+              debugger;
+
               if (!hasValue) {
                 return;
               }
