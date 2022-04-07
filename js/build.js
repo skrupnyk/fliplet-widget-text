@@ -23,7 +23,7 @@
       $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
       $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
       $('.fl-wysiwyg-text .fl-wysiwyg-text.mce-content-body').replaceWith(function() {
-        debugger;
+        console.log($(this).contents());
         return $(this).contents();
       });
 
