@@ -344,7 +344,7 @@
 
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
-              debugger;
+              console.log(value);
 
               if (!hasValue) {
                 return;
