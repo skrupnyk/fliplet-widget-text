@@ -23,7 +23,6 @@
       $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
       $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
       $('.fl-wysiwyg-text .fl-wysiwyg-text.mce-content-body').replaceWith(function() {
-        console.log($(this).contents());
         return $(this).contents();
       });
 
@@ -345,11 +344,10 @@
 
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
-              console.log(value, hasValue);
-
-              // if (!hasValue && !value) {
-              //   return;
-              // }
+              if (!hasValue) {
+                console.log(value);
+                return;
+              }
 
               // Save changes
               debounceSave();
