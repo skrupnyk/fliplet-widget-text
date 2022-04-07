@@ -239,9 +239,9 @@
 
               console.log(hasValue);
 
-              // if (!hasValue) {
-              //   return;
-              // }
+              if (!hasValue) {
+                return;
+              }
 
               if (!isInitialized) {
                 return;
