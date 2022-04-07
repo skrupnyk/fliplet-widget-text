@@ -322,10 +322,6 @@
               var fontFamily = window.getComputedStyle(e.element).getPropertyValue('font-family');
               var fontSize = window.getComputedStyle(e.element).getPropertyValue('font-size');
 
-              // if (!hasValue) {
-              //   return;
-              // }
-
               // Send content to Studio
               Fliplet.Studio.emit('tinymce', {
                 message: 'tinymceNodeChange',
@@ -343,6 +339,10 @@
               });
 
               if (!isInitialized) {
+                return;
+              }
+
+              if (!hasValue) {
                 return;
               }
 
