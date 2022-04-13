@@ -341,6 +341,8 @@
 
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
+              console.log(value);
+
               if (!hasValue) {
                 console.log(value);
                 return;
