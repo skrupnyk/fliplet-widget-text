@@ -234,7 +234,7 @@
               resolve();
             });
 
-            ed.on('change', function() {
+            ed.on('change', function(e) {
               debugger;
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
