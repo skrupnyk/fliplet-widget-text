@@ -298,7 +298,6 @@
             });
 
             ed.on('nodeChange', function(e) {
-              debugger;
               /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
 
               // Update element highlight if there isn't already an inline element selected
@@ -337,15 +336,15 @@
                 return;
               }
 
+              // Save changes
+              debounceSave();
+
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
               if (!hasValue) {
                 console.log(value);
                 return;
               }
-
-              // Save changes
-              debounceSave();
             });
           }
         });
