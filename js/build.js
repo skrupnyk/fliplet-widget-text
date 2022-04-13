@@ -255,6 +255,7 @@
             });
 
             ed.on('input', function() {
+              debugger;
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
