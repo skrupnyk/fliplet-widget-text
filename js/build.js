@@ -235,6 +235,10 @@
             });
 
             ed.on('change', function() {
+              var value = $element.text().trim().replace(/[\r\n]+/g, '');
+
+              hasValue = !!value;
+
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
               if (!hasValue) {
