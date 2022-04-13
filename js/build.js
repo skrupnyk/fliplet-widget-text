@@ -18,19 +18,12 @@
     var lastSavedHtml;
 
     function cleanUpContent() {
-      debugger;
-      var content = $(this).contents();
-
-      if (!content) {
-        return;
-      }
-
       // Remove any existing markers
       $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
       $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
       $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
       $('.fl-wysiwyg-text .fl-wysiwyg-text.mce-content-body').replaceWith(function() {
-        return content;
+        return $(this).contents();
       });
 
       // Remove empty class attributes
@@ -48,8 +41,6 @@
     }
 
     function saveChanges() {
-      cleanUpContent();
-
       var data = {
         html: editor && typeof editor.getContent === 'function'
           ? editor.getContent()
@@ -63,6 +54,12 @@
 
       var $html = $('<div>' + data.html + '</div>').clone();
       var $replacedHTML = replaceWidgetInstances($html);
+
+      if (data.hasValue) {
+        cleanUpContent();
+      } else {
+        insertPlaceholder();
+      }
 
       // Pass HTML content through a hook so any JavaScript that has changed the HTML
       // can use this to revert the HTML changes
@@ -278,14 +275,14 @@
             });
 
             ed.on('blur', function() {
-              var value = $element.text().trim().replace(/[\r\n]+/g, '');
+              // var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
-              if (!value) {
-                insertPlaceholder();
-                hasValue = false;
+              // if (!value) {
+              //   insertPlaceholder();
+              //   hasValue = false;
 
-                return;
-              }
+              //   return;
+              // }
 
               onBlur = true;
               $element.parents('[draggable="false"]').attr('draggable', true);
