@@ -338,18 +338,13 @@
 
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
-              console.log(value);
 
-              debugger;
-
-              // if (!hasValue && !value) {
-              //   return;
-              // }
+              if (!hasValue) {
+                return;
+              }
 
               // Save changes
-              if (value) {
-                debounceSave();
-              }
+              debounceSave();
             });
           }
         });
