@@ -45,10 +45,10 @@
       var data = {
         html: editor && typeof editor.getContent === 'function'
           ? editor.getContent()
-          : widgetData.html,
-        hasValue: editor && typeof editor.getContent === 'function'
-          ? hasValue
-          : widgetData.hasValue
+          : widgetData.html
+        // hasValue: editor && typeof editor.getContent === 'function'
+        //   ? hasValue
+        //   : widgetData.hasValue
       };
 
       onBlur = false;
@@ -56,7 +56,7 @@
       var $html = $('<div>' + data.html + '</div>').clone();
       var $replacedHTML = replaceWidgetInstances($html);
 
-      if (data.hasValue) {
+      if (!!data.html) {
         cleanUpContent();
       } else {
         insertPlaceholder();
@@ -253,9 +253,9 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              var value = $element.text().trim().replace(/[\r\n]+/g, '');
+              // var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
-              hasValue = !!value;
+              // hasValue = !!value;
 
               if (!isInitialized) {
                 return;
