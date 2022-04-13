@@ -340,6 +340,8 @@
 
               console.log(value);
 
+              debugger;
+
               if (!hasValue && !value) {
                 return;
               }
