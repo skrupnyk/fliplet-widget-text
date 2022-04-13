@@ -41,6 +41,7 @@
     }
 
     function saveChanges() {
+      debugger;
       var data = {
         html: editor && typeof editor.getContent === 'function'
           ? editor.getContent()
