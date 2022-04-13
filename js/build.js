@@ -344,7 +344,6 @@
               console.log(value);
 
               if (!hasValue) {
-                console.log(value);
                 return;
               }
             });
