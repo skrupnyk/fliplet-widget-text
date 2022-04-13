@@ -235,6 +235,7 @@
             });
 
             ed.on('change', function() {
+              debugger;
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
               hasValue = !!value;
