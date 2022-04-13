@@ -336,9 +336,6 @@
                 return;
               }
 
-              // Save changes
-              debounceSave();
-
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
               console.log(value);
@@ -346,6 +343,9 @@
               if (!hasValue) {
                 return;
               }
+
+              // Save changes
+              debounceSave();
             });
           }
         });
