@@ -14,7 +14,7 @@
     var isInitialized = false;
     var hasValue = !!widgetData.html;
     var onBlur = false;
-    //var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
+    var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
 
     function cleanUpContent() {
@@ -56,11 +56,11 @@
       var $html = $('<div>' + data.html + '</div>').clone();
       var $replacedHTML = replaceWidgetInstances($html);
 
-      if (!!data.html) {
-        cleanUpContent();
-      } else {
-        insertPlaceholder();
-      }
+      // if (!!data.html) {
+      //   cleanUpContent();
+      // } else {
+      //   insertPlaceholder();
+      // }
 
       // Pass HTML content through a hook so any JavaScript that has changed the HTML
       // can use this to revert the HTML changes
@@ -197,7 +197,6 @@
           forced_root_block: 'p',
           object_resizing: false,
           verify_html: false,
-          placeholder: 'Ask a question or post an update...',
           plugins: [
             'advlist lists link image charmap hr',
             'searchreplace wordcount insertdatetime table textcolor colorpicker',
@@ -236,6 +235,10 @@
 
               // To process image selection after image is loaded
               Fliplet.Widget.updateHighlightDimensions();
+
+              if (tinymce.get('Text').getContent() == '') {
+                insertPlaceholder();
+              }
 
               resolve();
             });
@@ -359,17 +362,17 @@
     }
 
     function insertPlaceholder() {
-      // var contentHTML = contentTemplate();
+      var contentHTML = contentTemplate();
 
-      // $WYSIWYG_SELECTOR.html(contentHTML);
+      $WYSIWYG_SELECTOR.html(contentHTML);
     }
 
     function init() {
       registerHandlebarsHelpers();
 
-      if (!widgetData.html && !$WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
-        insertPlaceholder();
-      }
+      // if (!widgetData.html && !$WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
+      //   insertPlaceholder();
+      // }
 
       if (mode !== 'interact') {
         cleanUpContent();
