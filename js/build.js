@@ -14,7 +14,7 @@
     var isInitialized = false;
     var hasValue = !!widgetData.html;
     var onBlur = false;
-    var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
+    //var contentTemplate = Fliplet.Widget.Templates['templates.build.content'];
     var lastSavedHtml;
 
     function cleanUpContent() {
@@ -197,6 +197,7 @@
           forced_root_block: 'p',
           object_resizing: false,
           verify_html: false,
+          placeholder: 'Ask a question or post an update...',
           plugins: [
             'advlist lists link image charmap hr',
             'searchreplace wordcount insertdatetime table textcolor colorpicker',
@@ -358,9 +359,9 @@
     }
 
     function insertPlaceholder() {
-      var contentHTML = contentTemplate();
+      // var contentHTML = contentTemplate();
 
-      $WYSIWYG_SELECTOR.html(contentHTML);
+      // $WYSIWYG_SELECTOR.html(contentHTML);
     }
 
     function init() {
