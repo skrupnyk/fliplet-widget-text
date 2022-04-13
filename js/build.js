@@ -18,12 +18,18 @@
     var lastSavedHtml;
 
     function cleanUpContent() {
+      var content = $(this).contents();
+
+      if (!!content) {
+        return;
+      }
+
       // Remove any existing markers
       $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
       $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
       $('.' + PLACEHOLDER_CLASS).removeClass(PLACEHOLDER_CLASS);
       $('.fl-wysiwyg-text .fl-wysiwyg-text.mce-content-body').replaceWith(function() {
-        return $(this).contents();
+        return content;
       });
 
       // Remove empty class attributes
@@ -234,17 +240,8 @@
               resolve();
             });
 
-            ed.on('change', function(e) {
-              debugger;
-              var value = $element.text().trim().replace(/[\r\n]+/g, '');
-
-              hasValue = !!value;
-
+            ed.on('change', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
-
-              if (!hasValue) {
-                return;
-              }
 
               if (!isInitialized) {
                 return;
@@ -255,7 +252,6 @@
             });
 
             ed.on('input', function() {
-              debugger;
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
@@ -339,13 +335,6 @@
               });
 
               if (!isInitialized) {
-                return;
-              }
-
-              var value = $element.text().trim().replace(/[\r\n]+/g, '');
-
-
-              if (!hasValue) {
                 return;
               }
 
