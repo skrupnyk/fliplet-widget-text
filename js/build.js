@@ -237,8 +237,6 @@
             ed.on('change', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              console.log(hasValue);
-
               if (!hasValue) {
                 return;
               }
@@ -257,8 +255,6 @@
               var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
               hasValue = !!value;
-
-              console.log(hasValue);
 
               if (!isInitialized) {
                 return;
@@ -288,8 +284,6 @@
                 return;
               }
 
-              console.log(hasValue);
-
               onBlur = true;
               $element.parents('[draggable="false"]').attr('draggable', true);
 
@@ -304,6 +298,7 @@
             });
 
             ed.on('nodeChange', function(e) {
+              debugger;
               /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
 
               // Update element highlight if there isn't already an inline element selected
@@ -342,12 +337,12 @@
                 return;
               }
 
-              // var value = $element.text().trim().replace(/[\r\n]+/g, '');
+              var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
-              // if (!hasValue) {
-              //   console.log(value);
-              //   return;
-              // }
+              if (!hasValue) {
+                console.log(value);
+                return;
+              }
 
               // Save changes
               debounceSave();
