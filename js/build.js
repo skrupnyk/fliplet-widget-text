@@ -342,12 +342,14 @@
 
               debugger;
 
-              if (!hasValue && !value) {
-                return;
-              }
+              // if (!hasValue && !value) {
+              //   return;
+              // }
 
               // Save changes
-              debounceSave();
+              if (value) {
+                debounceSave();
+              }
             });
           }
         });
