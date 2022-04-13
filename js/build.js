@@ -18,6 +18,7 @@
     var lastSavedHtml;
 
     function cleanUpContent() {
+      debugger;
       var content = $(this).contents();
 
       if (!content) {
