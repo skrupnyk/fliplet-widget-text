@@ -342,12 +342,12 @@
                 return;
               }
 
-              var value = $element.text().trim().replace(/[\r\n]+/g, '');
+              // var value = $element.text().trim().replace(/[\r\n]+/g, '');
 
-              if (!hasValue) {
-                console.log(value);
-                return;
-              }
+              // if (!hasValue) {
+              //   console.log(value);
+              //   return;
+              // }
 
               // Save changes
               debounceSave();
