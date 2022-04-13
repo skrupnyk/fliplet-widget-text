@@ -340,7 +340,7 @@
 
               console.log(value);
 
-              if (!hasValue) {
+              if (!hasValue || !value) {
                 return;
               }
 
