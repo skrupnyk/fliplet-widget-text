@@ -20,7 +20,7 @@
     function cleanUpContent() {
       var content = $(this).contents();
 
-      if (!!content) {
+      if (!content) {
         return;
       }
 
