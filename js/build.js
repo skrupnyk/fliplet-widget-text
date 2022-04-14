@@ -18,10 +18,6 @@
     var lastSavedHtml;
 
     function cleanUpContent() {
-      if ($WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
-        return;
-      }
-
       // Remove any existing markers
       $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
       $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
@@ -45,6 +41,10 @@
     }
 
     function saveChanges() {
+      if ($WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
+        return;
+      }
+
       cleanUpContent();
 
       var data = {
