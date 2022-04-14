@@ -18,6 +18,11 @@
     var lastSavedHtml;
 
     function cleanUpContent() {
+      debugger;
+      if (!hasValue) {
+        return;
+      }
+
       // Remove any existing markers
       $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
       $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
@@ -41,7 +46,8 @@
     }
 
     function saveChanges() {
-      debugger;
+      cleanUpContent();
+
       var data = {
         html: editor && typeof editor.getContent === 'function'
           ? editor.getContent()
@@ -55,12 +61,6 @@
 
       var $html = $('<div>' + data.html + '</div>').clone();
       var $replacedHTML = replaceWidgetInstances($html);
-
-      // if (!!data.html) {
-      //   cleanUpContent();
-      // } else {
-      //   insertPlaceholder();
-      // }
 
       // Pass HTML content through a hook so any JavaScript that has changed the HTML
       // can use this to revert the HTML changes
@@ -257,8 +257,6 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              // var value = $element.text().trim().replace(/[\r\n]+/g, '');
-
               // hasValue = !!value;
 
               if (!isInitialized) {
@@ -282,6 +280,7 @@
             ed.on('blur', function() {
               if (tinymce.activeEditor.getContent() === '') {
                 insertPlaceholder();
+                hasValue = false;
 
                 return;
               }
