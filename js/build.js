@@ -252,7 +252,7 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              // hasValue = !!value;
+              hasValue = !!tinymce.activeEditor.getContent();
 
               if (!isInitialized) {
                 return;
