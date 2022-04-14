@@ -18,11 +18,6 @@
     var lastSavedHtml;
 
     function cleanUpContent() {
-      debugger;
-      if (!hasValue) {
-        return;
-      }
-
       // Remove any existing markers
       $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
       $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
