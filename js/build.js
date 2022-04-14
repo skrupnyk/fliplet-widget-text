@@ -18,6 +18,10 @@
     var lastSavedHtml;
 
     function cleanUpContent() {
+      if ($WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
+        return;
+      }
+
       // Remove any existing markers
       $('.' + MIRROR_ELEMENT_CLASS).removeClass(MIRROR_ELEMENT_CLASS);
       $('.' + MIRROR_ROOT_CLASS).removeClass(MIRROR_ROOT_CLASS);
@@ -47,9 +51,6 @@
         html: editor && typeof editor.getContent === 'function'
           ? editor.getContent()
           : widgetData.html
-        // hasValue: editor && typeof editor.getContent === 'function'
-        //   ? hasValue
-        //   : widgetData.hasValue
       };
 
       onBlur = false;
@@ -360,10 +361,6 @@
 
     function init() {
       registerHandlebarsHelpers();
-
-      // if (!widgetData.html && !$WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
-      //   insertPlaceholder();
-      // }
 
       if (mode !== 'interact') {
         cleanUpContent();
