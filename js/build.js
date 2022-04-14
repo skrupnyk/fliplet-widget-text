@@ -282,6 +282,8 @@
             ed.on('blur', function() {
               if (tinymce.activeEditor.getContent() === '') {
                 insertPlaceholder();
+
+                return;
               }
 
               onBlur = true;
