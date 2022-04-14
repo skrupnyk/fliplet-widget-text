@@ -280,14 +280,9 @@
             });
 
             ed.on('blur', function() {
-              // var value = $element.text().trim().replace(/[\r\n]+/g, '');
-
-              // if (!value) {
-              //   insertPlaceholder();
-              //   hasValue = false;
-
-              //   return;
-              // }
+              if (tinymce.activeEditor.getContent() === '') {
+                insertPlaceholder();
+              }
 
               onBlur = true;
               $element.parents('[draggable="false"]').attr('draggable', true);
