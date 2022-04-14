@@ -41,15 +41,16 @@
     }
 
     function saveChanges() {
+      if ($WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
+        return;
+      }
+
       cleanUpContent();
 
       var data = {
         html: editor && typeof editor.getContent === 'function'
           ? editor.getContent()
-          : widgetData.html,
-        hasValue: editor && typeof editor.getContent === 'function'
-          ? hasValue
-          : widgetData.hasValue
+          : widgetData.html
       };
 
       onBlur = false;
@@ -231,13 +232,17 @@
               // To process image selection after image is loaded
               Fliplet.Widget.updateHighlightDimensions();
 
+              if (tinymce.activeEditor.getContent() === '') {
+                insertPlaceholder();
+              }
+
               resolve();
             });
 
             ed.on('change', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              if (!hasValue || !isInitialized) {
+              if (!isInitialized) {
                 return;
               }
 
@@ -248,9 +253,7 @@
             ed.on('input', function() {
               Fliplet.Widget.updateHighlightDimensions(widgetData.id);
 
-              var value = $element.text().trim().replace(/[\r\n]+/g, '');
-
-              hasValue = !!value;
+              hasValue = !!tinymce.activeEditor.getContent();
 
               if (!isInitialized) {
                 return;
@@ -271,9 +274,7 @@
             });
 
             ed.on('blur', function() {
-              var value = $element.text().trim().replace(/[\r\n]+/g, '');
-
-              if (!value) {
+              if (tinymce.activeEditor.getContent() === '') {
                 insertPlaceholder();
                 hasValue = false;
 
@@ -294,10 +295,6 @@
             });
 
             ed.on('nodeChange', function(e) {
-              if (!hasValue) {
-                return;
-              }
-
               /* Mirror TinyMCE selection and styles to Studio TinyMCE instance */
 
               // Update element highlight if there isn't already an inline element selected
@@ -364,10 +361,6 @@
 
     function init() {
       registerHandlebarsHelpers();
-
-      if (!widgetData.html && !$WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
-        insertPlaceholder();
-      }
 
       if (mode !== 'interact') {
         cleanUpContent();
