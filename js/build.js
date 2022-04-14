@@ -236,7 +236,9 @@
               // To process image selection after image is loaded
               Fliplet.Widget.updateHighlightDimensions();
 
-              if (tinymce.get('Text').getContent() == '') {
+              debugger;
+
+              if (tinymce.get('Text').getContent() === '') {
                 insertPlaceholder();
               }
 
