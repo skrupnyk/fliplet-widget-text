@@ -275,7 +275,8 @@
 
             ed.on('blur', function() {
               if (tinymce.activeEditor.getContent() === '') {
-                init();
+                registerHandlebarsHelpers();
+                insertPlaceholder();
                 hasValue = false;
 
                 return;
