@@ -275,16 +275,16 @@
 
             ed.on('blur', function() {
               if (tinymce.activeEditor.getContent() === '') {
-                registerHandlebarsHelpers();
                 insertPlaceholder();
 
-                if (mode !== 'interact') {
-                  cleanUpContent();
+                initializeEditor()
+                  .then(function() {
+                    isInitialized = true;
+                    editor.hide();
 
-                  if (!isDev) {
-                    return;
-                  }
-                }
+                    studioEventHandler();
+                    attachEventHandler();
+                  });
 
                 hasValue = false;
 
