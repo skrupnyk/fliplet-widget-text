@@ -277,6 +277,15 @@
               if (tinymce.activeEditor.getContent() === '') {
                 registerHandlebarsHelpers();
                 insertPlaceholder();
+
+                if (mode !== 'interact') {
+                  cleanUpContent();
+
+                  if (!isDev) {
+                    return;
+                  }
+                }
+
                 hasValue = false;
 
                 return;
