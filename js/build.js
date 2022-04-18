@@ -272,6 +272,7 @@
             ed.on('blur', function() {
               if (tinymce.activeEditor.getContent() === '') {
                 insertPlaceholder();
+                editor.hide();
 
                 hasValue = false;
 
@@ -354,7 +355,6 @@
       var contentHTML = contentTemplate();
 
       $WYSIWYG_SELECTOR.html(contentHTML);
-      editor.hide();
     }
 
     function init() {
