@@ -232,10 +232,6 @@
               // To process image selection after image is loaded
               Fliplet.Widget.updateHighlightDimensions();
 
-              if (tinymce.activeEditor.getContent() === '') {
-                insertPlaceholder();
-              }
-
               resolve();
             });
 
@@ -276,6 +272,8 @@
             ed.on('blur', function() {
               if (tinymce.activeEditor.getContent() === '') {
                 insertPlaceholder();
+                editor.hide();
+
                 hasValue = false;
 
                 return;
@@ -361,6 +359,10 @@
 
     function init() {
       registerHandlebarsHelpers();
+
+      if (!widgetData.html && !$WYSIWYG_SELECTOR.find('.' + PLACEHOLDER_CLASS).length) {
+        insertPlaceholder();
+      }
 
       if (mode !== 'interact') {
         cleanUpContent();
