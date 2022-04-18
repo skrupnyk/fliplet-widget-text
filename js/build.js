@@ -270,11 +270,6 @@
             });
 
             ed.on('blur', function() {
-              onBlur = true;
-              $element.parents('[draggable="false"]').attr('draggable', true);
-
-              Fliplet.Studio.emit('set-wysiwyg-status', false);
-
               if (tinymce.activeEditor.getContent() === '') {
                 insertPlaceholder();
 
@@ -282,6 +277,11 @@
 
                 return;
               }
+
+              onBlur = true;
+              $element.parents('[draggable="false"]').attr('draggable', true);
+
+              Fliplet.Studio.emit('set-wysiwyg-status', false);
 
               if (!isInitialized) {
                 return;
@@ -354,6 +354,7 @@
       var contentHTML = contentTemplate();
 
       $WYSIWYG_SELECTOR.html(contentHTML);
+      editor.hide();
     }
 
     function init() {
